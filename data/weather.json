@@ -1,0 +1,12 @@
+{
+  "location": "Cleveland",
+  "current": {
+    "temperature": 20,
+    "condition": "A pleasant day",
+    "updated": "today"
+  },
+  "forecast": [
+    { "day": "Today", "temperature": 20, "condition": "A pleasant day" },
+    { "day": "Tomorrow", "temperature": 22, "condition": "Sunny" }
+  ]
+}

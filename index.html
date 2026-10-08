@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple weather dashboard using shared weather data and a saved theme preference.">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="dashboard">
+    <header class="dashboard__header">
+      <div>
+        <p class="eyebrow">Live dashboard</p>
+        <h1>Weather</h1>
+      </div>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle__icon" aria-hidden="true">☀</span>
+        <span class="theme-toggle__label">Light mode</span>
+      </button>
+    </header>
+
+    <section class="weather-card" aria-labelledby="weather-location">
+      <div class="weather-card__status" id="weather-status" role="status" aria-live="polite">
+        Loading weather…
+      </div>
+
+      <div id="weather-data" class="weather-data" hidden>
+        <p class="weather-data__location" id="weather-location"></p>
+        <p class="weather-data__temperature"><span id="weather-temperature"></span>°C</p>
+        <p class="weather-data__condition" id="weather-condition"></p>
+        <p class="weather-data__updated" id="weather-updated"></p>
+      </div>
+
+      <div class="weather-error" id="weather-error" role="alert" hidden>
+        <strong>Weather unavailable</strong>
+        <p>We could not load the weather information. Please refresh or try again later.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Weather data is supplied by the project. Your theme preference is saved only in this browser.</p>
+    </footer>
+  </main>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
