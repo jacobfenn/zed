@@ -128,6 +128,7 @@ eventForm.addEventListener('submit', (event) => {
   events.push(newEvent);
   const wasSaved = saveEvents();
   sportFilter.value = 'all';
+  sortOrder.value = 'date';
   displayEvents();
   statusMessage.textContent = wasSaved
     ? `${newEvent.name} was added to your event log.`

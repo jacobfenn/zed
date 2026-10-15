@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,8 +9,11 @@
   <title>Game Log | Sports Event Tracker</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
+
   <main class="page-shell">
+
     <header class="page-header">
       <div>
         <p class="eyebrow">A personal record</p>
@@ -16,7 +21,10 @@
         <p class="page-intro">Every match you've been to... in one place.</p>
       </div>
       <p class="total-count"><span id="event-count" aria-live="polite">0</span> games logged</p>
+
     </header>
+
+
 
     <div class="tracker-layout">
       <section class="entry-panel" aria-labelledby="entry-heading">
@@ -24,6 +32,7 @@
         <form id="event-form">
           <label for="event-sport">Sport</label>
           <select id="event-sport" name="sport" required>
+
             <option value="">Choose a sport</option>
             <option>Baseball</option>
             <option>Basketball</option>
@@ -32,6 +41,8 @@
             <option>NASCAR</option>
             <option>Soccer</option>
             <option>Other</option>
+
+
           </select>
 
           <label for="event-name">Game or teams</label>
@@ -46,6 +57,10 @@
           <button class="save-button" type="submit"><span aria-hidden="true">+</span> Save game</button>
         </form>
         <p class="form-note">Your event list is saved in this browser.</p>
+
+
+
+
       </section>
 
       <section class="log-panel" aria-labelledby="log-heading">
@@ -82,6 +97,8 @@
         <p class="empty-state" id="empty-state">No games added yet. Your first one can go here.</p>
         <ul class="event-list" id="event-list" aria-label="Saved sporting events"></ul>
       </section>
+
+
     </div>
 
     <footer class="page-footer">
@@ -90,6 +107,11 @@
     </footer>
   </main>
   <script src="js/app.js" defer></script>
+
+
 </body>
+
+
+
 </html>
  #
