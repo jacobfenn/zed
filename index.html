@@ -20,9 +20,28 @@
         <h1>Sporting Events I've been to</h1>
         <p class="page-intro">Every match you've been to... in one place.</p>
       </div>
-      <p class="total-count"><span id="event-count" aria-live="polite">0</span> games logged</p>
+      <div class="header-actions">
+        <button class="guide-button" id="guide-open" type="button">How to use</button>
+        <p class="total-count"><span id="event-count" aria-live="polite">0</span> games logged</p>
+      </div>
 
     </header>
+
+    <dialog class="guide-dialog" id="guide-dialog" aria-labelledby="guide-heading">
+      <div class="guide-dialog-header">
+        <div>
+          <p class="eyebrow">About the tracker</p>
+          <h2 id="guide-heading">How to use</h2>
+        </div>
+        <button class="guide-close" id="guide-close" type="button">Close</button>
+      </div>
+      <ol>
+        <li>Add teams you follow in <strong>Favorite teams</strong> to track their results.</li>
+        <li>In <strong>Add a game</strong>, enter the sport, teams, date, and venue. Score and notes are optional.</li>
+        <li>Select <strong>Won</strong> beside the winner. Favorite-team results update the W/L markers and overall record.</li>
+      </ol>
+      <p class="guide-privacy">Games and favorites are saved in this browser and are not sent to a server.</p>
+    </dialog>
 
     <section class="favorites-section" aria-labelledby="favorites-heading">
       <div class="favorites-top">
@@ -164,6 +183,13 @@
           <span class="favorite-record-loss-bar" id="favorite-record-loss-bar"></span>
         </div>
       </div>
+    </section>
+
+    <section class="venue-stats" aria-labelledby="venue-stats-heading">
+      <p class="eyebrow">Places you've been</p>
+      <h2 id="venue-stats-heading">Most visited venues</h2>
+      <p class="venue-stats-empty" id="venue-stats-empty">Add games to see your most visited venues.</p>
+      <ol class="venue-stats-list" id="venue-stats-list" aria-label="Venues ranked by number of visits" hidden></ol>
     </section>
 
     <footer class="page-footer">

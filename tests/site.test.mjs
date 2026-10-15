@@ -14,6 +14,8 @@ test('the page has a labeled game form and an event list', async () => {
   assert.match(html, /Sporting Events I've been to/);
   assert.match(html, /id="favorite-team-form"/);
   assert.match(html, /id="favorite-team-list"/);
+  assert.match(html, /id="guide-open"/);
+  assert.match(html, /id="guide-dialog"/);
   assert.match(html, /id="event-form"/);
   assert.match(html, /<option>College Baseball<\/option>/);
   assert.match(html, /<option>MLB<\/option>/);
@@ -39,6 +41,7 @@ test('the page has a labeled game form and an event list', async () => {
   assert.match(html, /id="team-legend"/);
   assert.match(html, /id="favorite-record-content"/);
   assert.match(html, /id="favorite-record-bar"/);
+  assert.match(html, /id="venue-stats-list"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /js\/app\.js/);
   assert.match(html, /css\/styles\.css/);
@@ -58,6 +61,8 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /secondEvent\.awayTeam/);
   assert.match(app, /function displayTeamStats\(/);
   assert.match(app, /function displayFavoriteRecord\(/);
+  assert.match(app, /function displayVenueStats\(/);
+  assert.match(app, /guideDialog\.showModal\(\)/);
   assert.match(app, /function getFavoriteTeamResults\(/);
   assert.match(app, /function getFavoriteTeamTileResult\(/);
   assert.match(app, /event-date--favorite-/);

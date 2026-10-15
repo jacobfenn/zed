@@ -1,5 +1,8 @@
 const STORAGE_KEY = 'sportsEventTrackerEvents';
 const FAVORITES_STORAGE_KEY = 'sportsEventTrackerFavorites';
+const guideOpenButton = document.querySelector('#guide-open');
+const guideDialog = document.querySelector('#guide-dialog');
+const guideCloseButton = document.querySelector('#guide-close');
 const eventForm = document.querySelector('#event-form');
 const favoriteTeamForm = document.querySelector('#favorite-team-form');
 const favoriteTeamList = document.querySelector('#favorite-team-list');
@@ -21,6 +24,8 @@ const favoriteRecordTally = document.querySelector('#favorite-record-tally');
 const favoriteRecordBar = document.querySelector('#favorite-record-bar');
 const favoriteRecordWinBar = document.querySelector('#favorite-record-win-bar');
 const favoriteRecordLossBar = document.querySelector('#favorite-record-loss-bar');
+const venueStatsEmpty = document.querySelector('#venue-stats-empty');
+const venueStatsList = document.querySelector('#venue-stats-list');
 const entryHeading = document.querySelector('#entry-heading');
 const saveButtonLabel = document.querySelector('#save-button-label');
 const cancelEditButton = document.querySelector('#cancel-edit');
@@ -207,6 +212,59 @@ function displayFavoriteRecord() {
   favoriteRecordBar.setAttribute('aria-label', `${wins} ${wins === 1 ? 'win' : 'wins'} and ${losses} ${losses === 1 ? 'loss' : 'losses'}, ${winPercentage.toFixed(1)} percent win rate`);
 }
 
+function displayVenueStats() {
+  const venueCounts = new Map();
+
+  events.forEach((savedEvent) => {
+    const name = savedEvent.venue.trim();
+    const key = name.toLocaleLowerCase();
+
+    if (!key) {
+      return;
+    }
+
+    const venue = venueCounts.get(key) || { name, count: 0 };
+    venue.count += 1;
+    venueCounts.set(key, venue);
+  });
+
+  const venues = [...venueCounts.values()].sort((firstVenue, secondVenue) => (
+    secondVenue.count - firstVenue.count
+    || firstVenue.name.localeCompare(secondVenue.name, undefined, { sensitivity: 'base' })
+  ));
+
+  venueStatsList.replaceChildren();
+  venueStatsEmpty.hidden = venues.length > 0;
+  venueStatsList.hidden = venues.length === 0;
+
+  if (venues.length === 0) {
+    return;
+  }
+
+  const mostVisits = venues[0].count;
+  venues.forEach((venue, index) => {
+    const item = document.createElement('li');
+    const name = document.createElement('span');
+    const count = document.createElement('span');
+    const meter = document.createElement('span');
+    const fill = document.createElement('span');
+
+    item.className = index === 0 ? 'venue-stat venue-stat--top' : 'venue-stat';
+    name.className = 'venue-stat-name';
+    name.textContent = venue.name;
+    count.className = 'venue-stat-count';
+    count.textContent = `${venue.count} ${venue.count === 1 ? 'visit' : 'visits'}`;
+    meter.className = 'venue-meter';
+    meter.setAttribute('aria-hidden', 'true');
+    fill.className = 'venue-meter-fill';
+    fill.style.width = `${(venue.count / mostVisits) * 100}%`;
+
+    meter.append(fill);
+    item.append(name, count, meter);
+    venueStatsList.append(item);
+  });
+}
+
 function appendTeamName(matchup, teamName, isWinner) {
   const team = document.createElement('span');
   team.textContent = teamName;
@@ -319,6 +377,7 @@ function displayEvents() {
   eventCount.textContent = events.length;
   displayTeamStats();
   displayFavoriteRecord();
+  displayVenueStats();
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
     secondEvent.date.localeCompare(firstEvent.date)
@@ -578,5 +637,7 @@ cancelEditButton.addEventListener('click', () => {
 });
 
 sportFilter.addEventListener('change', displayEvents);
+guideOpenButton.addEventListener('click', () => guideDialog.showModal());
+guideCloseButton.addEventListener('click', () => guideDialog.close());
 displayFavoriteTeams();
 displayEvents();
