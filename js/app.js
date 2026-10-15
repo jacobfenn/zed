@@ -38,15 +38,27 @@ function loadEvents() {
       throw new Error('Saved events are not a list.');
     }
 
-    return savedEvents.filter((savedEvent) => (
-      savedEvent
-      && savedEvent.id
-      && savedEvent.sport
-      && (savedEvent.name || (savedEvent.homeTeam && savedEvent.awayTeam))
-      && savedEvent.date
-      && savedEvent.venue
-      && !Number.isNaN(Date.parse(`${savedEvent.date}T12:00:00`))
-    ));
+    return savedEvents
+      .filter((savedEvent) => (
+        savedEvent
+        && savedEvent.id
+        && savedEvent.sport
+        && (savedEvent.name || (savedEvent.homeTeam && savedEvent.awayTeam))
+        && savedEvent.date
+        && savedEvent.venue
+        && !Number.isNaN(Date.parse(`${savedEvent.date}T12:00:00`))
+      ))
+      .map((savedEvent) => {
+        const sport = savedEvent.sport === 'Baseball'
+          ? 'College Baseball'
+          : savedEvent.sport === 'Basketball'
+            ? 'NBA'
+            : savedEvent.sport === 'Football'
+              ? 'College Football'
+              : savedEvent.sport;
+
+        return sport === savedEvent.sport ? savedEvent : { ...savedEvent, sport };
+      });
   } catch (error) {
     statusMessage.textContent = 'Saved events could not be read. You can start a new list.';
     return [];
