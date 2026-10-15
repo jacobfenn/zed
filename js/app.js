@@ -188,6 +188,8 @@ function displayFavoriteRecord() {
 
   const winPercentage = (wins / totalResults) * 100;
   favoriteWinRate.textContent = `${winPercentage.toFixed(1)}%`;
+  favoriteWinRate.classList.toggle('favorite-win-rate--above', winPercentage > 50);
+  favoriteWinRate.classList.toggle('favorite-win-rate--below', winPercentage < 50);
   favoriteRecordTally.textContent = `${wins} ${wins === 1 ? 'win' : 'wins'}, ${losses} ${losses === 1 ? 'loss' : 'losses'}`;
   favoriteRecordWinBar.style.width = `${winPercentage}%`;
   favoriteRecordLossBar.style.width = `${100 - winPercentage}%`;

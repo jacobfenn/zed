@@ -4,23 +4,23 @@
 
 :root {
   color-scheme: light;
-  --page: #f1f2f6;
+  --page: #f3f1f6;
   --surface: #ffffff;
-  --ink: #302832;
-  --muted: #6e6570;
-  --primary: #702340;
-  --primary-dark: #4f1730;
+  --ink: #302c38;
+  --muted: #6e6878;
+  --primary: #67577f;
+  --primary-dark: #4d4160;
   --accent: #c94f54;
-  --accent-light: #f4dfe3;
-  --blue: #315f85;
-  --line: #dfd9e1;
-  --focus: #2f6e9f;
+  --accent-light: #ece7f2;
+  --blue: #5e5878;
+  --line: #e0dce6;
+  --focus: #796895;
 }
  
 body {
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(180deg, #eceef4 0, var(--page) 25rem, #f8f8fa 100%);
+  background: linear-gradient(180deg, #efecf3 0, var(--page) 25rem, #fbfafc 100%);
   color: var(--ink);
   font-family: "Avenir Next", "Trebuchet MS", sans-serif;
   font-size: 1rem;
@@ -536,7 +536,7 @@ button:focus-visible {
 
 .edit-button:hover {
   border-color: var(--primary);
-  background: #f8f0f3;
+  background: #f3eff7;
 }
 
 .delete-button {
@@ -685,6 +685,14 @@ button:focus-visible {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.8rem;
   font-weight: 400;
+}
+
+.favorite-record-rate strong.favorite-win-rate--above {
+  color: #205b35;
+}
+
+.favorite-record-rate strong.favorite-win-rate--below {
+  color: #9f2f38;
 }
 
 .favorite-record-tally {
