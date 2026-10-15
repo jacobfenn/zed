@@ -14,6 +14,7 @@ Then open `http://localhost:8000`.
 
 - Add a game with its sport, teams or event, date, and venue.
 - Keep entries in this browser with `localStorage`.
+- Add favorite teams to highlight their wins and losses.
 - View the newest events first, filter by sport, and remove entries.
 - See each team's share of all home and away appearances in a chart.
 - Use the form with a keyboard and on a narrow screen.

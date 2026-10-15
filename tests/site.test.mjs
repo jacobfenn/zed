@@ -12,6 +12,8 @@ test('the page has a labeled game form and an event list', async () => {
   const html = await read('index.html');
 
   assert.match(html, /Sporting Events I've been to/);
+  assert.match(html, /id="favorite-team-form"/);
+  assert.match(html, /id="favorite-team-list"/);
   assert.match(html, /id="event-form"/);
   assert.match(html, /for="event-sport"/);
   assert.match(html, /id="save-button-label"/);
@@ -30,6 +32,8 @@ test('the page has a labeled game form and an event list', async () => {
   assert.match(html, /Team \/ matchup A-Z/);
   assert.match(html, /id="team-chart"/);
   assert.match(html, /id="team-legend"/);
+  assert.match(html, /id="favorite-record-content"/);
+  assert.match(html, /id="favorite-record-bar"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /js\/app\.js/);
   assert.match(html, /css\/styles\.css/);
@@ -46,8 +50,11 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /firstEvent\.homeTeam/);
   assert.match(app, /secondEvent\.awayTeam/);
   assert.match(app, /function displayTeamStats\(/);
-  assert.match(app, /function getTcuResult\(/);
-  assert.match(app, /event-date--tcu-/);
+  assert.match(app, /function displayFavoriteRecord\(/);
+  assert.match(app, /function getFavoriteTeamResults\(/);
+  assert.match(app, /function getFavoriteTeamTileResult\(/);
+  assert.match(app, /event-date--favorite-/);
+  assert.match(app, /FAVORITES_STORAGE_KEY/);
   assert.match(app, /toLocaleLowerCase\(\)/);
   assert.match(app, /conic-gradient/);
   assert.match(app, /sortOrder\.addEventListener\('change'/);

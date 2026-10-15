@@ -24,6 +24,23 @@
 
     </header>
 
+    <section class="favorites-section" aria-labelledby="favorites-heading">
+      <div class="favorites-top">
+        <div>
+          <p class="eyebrow">Personalize</p>
+          <h2 id="favorites-heading">Favorite teams</h2>
+        </div>
+        <form class="favorite-team-form" id="favorite-team-form">
+          <label for="favorite-team-name">Add a team</label>
+          <input id="favorite-team-name" name="team" type="text" placeholder="TCU" required>
+          <button class="favorite-add-button" type="submit">Add team</button>
+        </form>
+      </div>
+      <p class="favorite-team-hint">Favorite teams show a green W for wins and a red L for losses in the event log below. This will directly effect your W/L stats at bottom of the page.</p>
+      <p class="favorite-team-empty" id="favorite-team-empty">No favorite teams added yet.</p>
+      <p class="favorite-team-status" id="favorite-team-status" role="status" aria-live="polite"></p>
+      <ul class="favorite-team-list" id="favorite-team-list" aria-label="Favorite teams"></ul>
+    </section>
 
 
     <div class="tracker-layout">
@@ -137,6 +154,22 @@
       <div class="team-stats-content" id="team-stats-content" hidden>
         <div class="team-chart" id="team-chart" role="img" aria-label="Team appearance chart"></div>
         <ul class="team-legend" id="team-legend" aria-label="Team appearance percentages"></ul>
+      </div>
+    </section>
+
+    <section class="favorite-record" aria-labelledby="favorite-record-heading">
+      <p class="eyebrow">Overall record</p>
+      <h2 id="favorite-record-heading">Favorite team results</h2>
+      <p class="favorite-record-empty" id="favorite-record-empty">Add favorite teams and record completed games to see your win rate.</p>
+      <div class="favorite-record-content" id="favorite-record-content" hidden>
+        <div class="favorite-record-stats">
+          <p class="favorite-record-rate"><strong id="favorite-win-rate">0%</strong> win rate</p>
+          <p class="favorite-record-tally" id="favorite-record-tally">0 wins, 0 losses</p>
+        </div>
+        <div class="favorite-record-bar" id="favorite-record-bar" role="img" aria-label="Favorite team win and loss percentage">
+          <span class="favorite-record-win-bar" id="favorite-record-win-bar"></span>
+          <span class="favorite-record-loss-bar" id="favorite-record-loss-bar"></span>
+        </div>
       </div>
     </section>
 

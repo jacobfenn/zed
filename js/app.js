@@ -1,5 +1,10 @@
 const STORAGE_KEY = 'sportsEventTrackerEvents';
+const FAVORITES_STORAGE_KEY = 'sportsEventTrackerFavorites';
 const eventForm = document.querySelector('#event-form');
+const favoriteTeamForm = document.querySelector('#favorite-team-form');
+const favoriteTeamList = document.querySelector('#favorite-team-list');
+const favoriteTeamEmpty = document.querySelector('#favorite-team-empty');
+const favoriteTeamStatus = document.querySelector('#favorite-team-status');
 const eventList = document.querySelector('#event-list');
 const eventCount = document.querySelector('#event-count');
 const emptyState = document.querySelector('#empty-state');
@@ -10,12 +15,20 @@ const teamStatsContent = document.querySelector('#team-stats-content');
 const teamStatsEmpty = document.querySelector('#team-stats-empty');
 const teamChart = document.querySelector('#team-chart');
 const teamLegend = document.querySelector('#team-legend');
+const favoriteRecordContent = document.querySelector('#favorite-record-content');
+const favoriteRecordEmpty = document.querySelector('#favorite-record-empty');
+const favoriteWinRate = document.querySelector('#favorite-win-rate');
+const favoriteRecordTally = document.querySelector('#favorite-record-tally');
+const favoriteRecordBar = document.querySelector('#favorite-record-bar');
+const favoriteRecordWinBar = document.querySelector('#favorite-record-win-bar');
+const favoriteRecordLossBar = document.querySelector('#favorite-record-loss-bar');
 const entryHeading = document.querySelector('#entry-heading');
 const saveButtonLabel = document.querySelector('#save-button-label');
 const cancelEditButton = document.querySelector('#cancel-edit');
 const chartColors = ['#702340', '#c94f54', '#315f85', '#d59b3c', '#527760', '#71588b', '#547c88', '#9a6651'];
 let editingEventId = null;
 let events = loadEvents();
+let favoriteTeams = loadFavoriteTeams();
 
 function loadEvents() {
   try {
@@ -47,6 +60,49 @@ function saveEvents() {
   } catch (error) {
     return false;
   }
+}
+
+function loadFavoriteTeams() {
+  try {
+    const savedTeams = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || '[]');
+    return Array.isArray(savedTeams)
+      ? savedTeams.filter((team) => typeof team === 'string' && team.trim())
+      : [];
+  } catch (error) {
+    favoriteTeamStatus.textContent = 'Favorite teams could not be read.';
+    return [];
+  }
+}
+
+function saveFavoriteTeams() {
+  try {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteTeams));
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function displayFavoriteTeams() {
+  favoriteTeamList.replaceChildren();
+  favoriteTeamEmpty.hidden = favoriteTeams.length > 0;
+
+  favoriteTeams.forEach((team) => {
+    const item = document.createElement('li');
+    const name = document.createElement('span');
+    const removeButton = document.createElement('button');
+
+    name.textContent = team;
+    removeButton.type = 'button';
+    removeButton.dataset.team = team;
+    removeButton.className = 'favorite-remove-button';
+    removeButton.setAttribute('aria-label', `Remove ${team} from favorite teams`);
+    removeButton.title = 'Remove team';
+    removeButton.textContent = '×';
+
+    item.append(name, removeButton);
+    favoriteTeamList.append(item);
+  });
 }
 
 function formatDate(date) {
@@ -83,16 +139,59 @@ function getTeamNames(savedEvent) {
   return oldMatchup.length === 2 ? oldMatchup : [savedEvent.name || ''];
 }
 
-function getTcuResult(savedEvent) {
-  const homeIsTcu = (savedEvent.homeTeam || '').toLocaleLowerCase().includes('tcu');
-  const awayIsTcu = (savedEvent.awayTeam || '').toLocaleLowerCase().includes('tcu');
-
-  if (!savedEvent.winner || homeIsTcu === awayIsTcu) {
-    return '';
+function getFavoriteTeamResults(savedEvent) {
+  const teams = getTeamNames(savedEvent);
+  if (!['home', 'away'].includes(savedEvent.winner) || teams.length !== 2) {
+    return [];
   }
 
-  const tcuSide = homeIsTcu ? 'home' : 'away';
-  return savedEvent.winner === tcuSide ? 'win' : 'loss';
+  const favoriteNames = favoriteTeams.map((team) => team.trim().toLocaleLowerCase());
+  const homeIsFavorite = favoriteNames.includes(teams[0].trim().toLocaleLowerCase());
+  const awayIsFavorite = favoriteNames.includes(teams[1].trim().toLocaleLowerCase());
+  const results = [];
+
+  if (homeIsFavorite) {
+    results.push(savedEvent.winner === 'home' ? 'win' : 'loss');
+  }
+
+  if (awayIsFavorite) {
+    results.push(savedEvent.winner === 'away' ? 'win' : 'loss');
+  }
+
+  return results;
+}
+
+function getFavoriteTeamTileResult(savedEvent) {
+  const results = getFavoriteTeamResults(savedEvent);
+  if (results.includes('win')) {
+    return 'win';
+  }
+
+  return results.includes('loss') ? 'loss' : '';
+}
+
+function displayFavoriteRecord() {
+  const results = events.flatMap(getFavoriteTeamResults);
+  const wins = results.filter((result) => result === 'win').length;
+  const losses = results.filter((result) => result === 'loss').length;
+  const totalResults = wins + losses;
+
+  favoriteRecordEmpty.hidden = totalResults > 0;
+  favoriteRecordContent.hidden = totalResults === 0;
+
+  if (totalResults === 0) {
+    favoriteRecordEmpty.textContent = favoriteTeams.length === 0
+      ? 'Add favorite teams and record completed games to see your win rate.'
+      : 'Record a completed game with a favorite team to see your win rate.';
+    return;
+  }
+
+  const winPercentage = (wins / totalResults) * 100;
+  favoriteWinRate.textContent = `${winPercentage.toFixed(1)}%`;
+  favoriteRecordTally.textContent = `${wins} ${wins === 1 ? 'win' : 'wins'}, ${losses} ${losses === 1 ? 'loss' : 'losses'}`;
+  favoriteRecordWinBar.style.width = `${winPercentage}%`;
+  favoriteRecordLossBar.style.width = `${100 - winPercentage}%`;
+  favoriteRecordBar.setAttribute('aria-label', `${wins} ${wins === 1 ? 'win' : 'wins'} and ${losses} ${losses === 1 ? 'loss' : 'losses'}, ${winPercentage.toFixed(1)} percent win rate`);
 }
 
 function appendTeamName(matchup, teamName, isWinner) {
@@ -206,6 +305,7 @@ function displayEvents() {
   eventList.replaceChildren();
   eventCount.textContent = events.length;
   displayTeamStats();
+  displayFavoriteRecord();
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
     sortOrder.value === 'team'
@@ -239,13 +339,13 @@ function displayEvents() {
     dateText.textContent = formatDate(savedEvent.date);
     date.append(dateText);
 
-    const tcuResult = getTcuResult(savedEvent);
-    if (tcuResult) {
-      date.classList.add(`event-date--tcu-${tcuResult}`);
+    const favoriteResult = getFavoriteTeamTileResult(savedEvent);
+    if (favoriteResult) {
+      date.classList.add(`event-date--favorite-${favoriteResult}`);
       const result = document.createElement('span');
       result.className = 'event-date-result';
-      result.setAttribute('aria-label', `TCU ${tcuResult}`);
-      result.textContent = tcuResult === 'win' ? 'W' : 'L';
+      result.setAttribute('aria-label', `Favorite team ${favoriteResult}`);
+      result.textContent = favoriteResult === 'win' ? 'W' : 'L';
       date.append(result);
     }
 
@@ -323,6 +423,44 @@ function displayEvents() {
     eventList.append(item);
   });
 }
+
+favoriteTeamForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const team = favoriteTeamForm.elements.team.value.trim();
+  const teamKey = team.toLocaleLowerCase();
+
+  if (favoriteTeams.some((favorite) => favorite.trim().toLocaleLowerCase() === teamKey)) {
+    favoriteTeamStatus.textContent = `${team} is already on your list.`;
+    return;
+  }
+
+  favoriteTeams.push(team);
+  const wasSaved = saveFavoriteTeams();
+  displayFavoriteTeams();
+  displayEvents();
+  favoriteTeamStatus.textContent = wasSaved
+    ? `${team} added to favorite teams.`
+    : `${team} added for now, but could not be saved in this browser.`;
+  favoriteTeamForm.reset();
+  favoriteTeamForm.elements.team.focus();
+});
+
+favoriteTeamList.addEventListener('click', (event) => {
+  const removeButton = event.target.closest('.favorite-remove-button');
+
+  if (!removeButton) {
+    return;
+  }
+
+  const removedTeam = removeButton.dataset.team;
+  favoriteTeams = favoriteTeams.filter((team) => team !== removedTeam);
+  const wasSaved = saveFavoriteTeams();
+  displayFavoriteTeams();
+  displayEvents();
+  favoriteTeamStatus.textContent = wasSaved
+    ? `${removedTeam} removed from favorite teams.`
+    : `${removedTeam} removed for now, but the change could not be saved.`;
+});
 
 eventForm.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -415,4 +553,5 @@ cancelEditButton.addEventListener('click', () => {
 
 sportFilter.addEventListener('change', displayEvents);
 sortOrder.addEventListener('change', displayEvents);
+displayFavoriteTeams();
 displayEvents();
