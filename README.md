@@ -1,6 +1,6 @@
-# Weather Dashboard
+# Game Log
 
-A small browser dashboard that loads weather data from a JSON file and remembers the reader's chosen theme.
+A small browser app for keeping a personal list of sporting events you have attended.
 
 ## Run locally
 
@@ -12,7 +12,7 @@ Then open `http://localhost:8000`.
 
 ## Features
 
-- `fetch()` loads weather data from `data/weather.json`.
-- `localStorage` remembers the selected light or dark theme.
-- The page displays a useful message if weather data cannot be loaded.
-- The layout adapts to narrow screens and supports keyboard focus.
+- Add a game with its sport, teams or event, date, and venue.
+- Keep entries in this browser with `localStorage`.
+- View the newest events first, filter by sport, and remove entries.
+- Use the form with a keyboard and on a narrow screen.

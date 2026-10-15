@@ -8,32 +8,37 @@ async function read(relativePath) {
   return readFile(new URL(relativePath, root), 'utf8');
 }
 
-test('the dashboard exposes the weather and theme controls', async () => {
+test('the page has a labeled game form and an event list', async () => {
   const html = await read('index.html');
 
-  assert.match(html, /id="weather-data"/);
-  assert.match(html, /id="theme-toggle"/);
+  assert.match(html, /Games I've been to/);
+  assert.match(html, /id="event-form"/);
+  assert.match(html, /for="event-sport"/);
+  assert.match(html, /for="event-name"/);
+  assert.match(html, /for="event-date"/);
+  assert.match(html, /for="event-venue"/);
+  assert.match(html, /id="event-list"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /js\/app\.js/);
   assert.match(html, /css\/styles\.css/);
 });
 
-test('the application loads weather with an error state and persists themes', async () => {
+test('the application saves, sorts, filters, and removes events', async () => {
   const app = await read('js/app.js');
 
-  assert.match(app, /fetch\(['"]\.\/data\/weather\.json['"]/);
-  assert.match(app, /THEME_STORAGE_KEY\s*=\s*['"]dashboardTheme['"]/);
-  assert.match(app, /localStorage\.setItem\(THEME_STORAGE_KEY/);
-  assert.match(app, /localStorage\.getItem\(THEME_STORAGE_KEY\)/);
-  assert.match(app, /displayWeatherError/);
-  assert.match(app, /aria-pressed/);
+  assert.match(app, /STORAGE_KEY\s*=\s*['"]sportsEventTrackerEvents['"]/);
+  assert.match(app, /localStorage\.setItem\(STORAGE_KEY/);
+  assert.match(app, /localStorage\.getItem\(STORAGE_KEY/);
+  assert.match(app, /\.sort\(/);
+  assert.match(app, /sportFilter\.addEventListener\('change'/);
+  assert.match(app, /deleteButton/);
+  assert.match(app, /catch \(error\)/);
 });
 
-test('the weather JSON and stylesheet are valid project assets', async () => {
-  const data = JSON.parse(await read('data/weather.json'));
+test('the stylesheet includes visible focus and a narrow-screen layout', async () => {
   const css = await read('css/styles.css');
 
-  assert.ok(data.location && data.current && data.forecast);
-  assert.match(css, /theme-dark/);
-  assert.match(css, /@media/);
+  assert.match(css, /:focus-visible/);
+  assert.match(css, /@media \(max-width: 760px\)/);
+  assert.match(css, /--green:/);
 });
