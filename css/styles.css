@@ -207,6 +207,13 @@ button:focus-visible {
   margin-bottom: 0;
 }
 
+.log-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
 .filter-control {
   display: flex;
   align-items: center;

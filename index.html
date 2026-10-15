@@ -12,7 +12,7 @@
     <header class="page-header">
       <div>
         <p class="eyebrow">A personal record</p>
-        <h1>Games I've been to</h1>
+        <h1>Sporting Events I've been to</h1>
         <p class="page-intro">Every match you've been to... in one place.</p>
       </div>
       <p class="total-count"><span id="event-count" aria-live="polite">0</span> games logged</p>
@@ -54,18 +54,27 @@
             <p class="eyebrow">Your collection</p>
             <h2 id="log-heading">Event log</h2>
           </div>
-          <div class="filter-control">
-            <label for="sport-filter">Show</label>
-            <select id="sport-filter">
-              <option value="all">All sports</option>
-              <option>Baseball</option>
-              <option>Basketball</option>
-              <option>Football</option>
-              <option>Hockey</option>
-              <option>NASCAR</option>
-              <option>Soccer</option>
-              <option>Other</option>
-            </select>
+          <div class="log-controls">
+            <div class="filter-control">
+              <label for="sport-filter">Show</label>
+              <select id="sport-filter">
+                <option value="all">All sports</option>
+                <option>Baseball</option>
+                <option>Basketball</option>
+                <option>Football</option>
+                <option>Hockey</option>
+                <option>NASCAR</option>
+                <option>Soccer</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="filter-control">
+              <label for="sort-order">Sort</label>
+              <select id="sort-order">
+                <option value="date">Newest first</option>
+                <option value="team">Team / matchup A-Z</option>
+              </select>
+            </div>
           </div>
         </div>
 

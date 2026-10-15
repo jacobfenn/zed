@@ -5,6 +5,7 @@ const eventCount = document.querySelector('#event-count');
 const emptyState = document.querySelector('#empty-state');
 const statusMessage = document.querySelector('#status-message');
 const sportFilter = document.querySelector('#sport-filter');
+const sortOrder = document.querySelector('#sort-order');
 let events = loadEvents();
 
 function loadEvents() {
@@ -52,7 +53,9 @@ function displayEvents() {
   eventCount.textContent = events.length;
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
-    secondEvent.date.localeCompare(firstEvent.date)
+    sortOrder.value === 'team'
+      ? firstEvent.name.localeCompare(secondEvent.name)
+      : secondEvent.date.localeCompare(firstEvent.date)
   ));
   const selectedSport = sportFilter.value;
   const visibleEvents = sortedEvents.filter((savedEvent) => (
@@ -150,4 +153,5 @@ eventList.addEventListener('click', (event) => {
 });
 
 sportFilter.addEventListener('change', displayEvents);
+sortOrder.addEventListener('change', displayEvents);
 displayEvents();
