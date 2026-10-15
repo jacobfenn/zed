@@ -400,10 +400,14 @@ function displayEvents() {
     }
 
     if (savedEvent.notes) {
-      const notes = document.createElement('p');
+      const notes = document.createElement('details');
       notes.className = 'event-notes';
-      notes.textContent = savedEvent.notes;
-      details.append(notes);
+      const notesLabel = document.createElement('summary');
+      const noteText = document.createElement('p');
+      notesLabel.textContent = 'Notes';
+      noteText.textContent = savedEvent.notes;
+      notes.append(notesLabel, noteText);
+      gameResult.append(notes);
     }
 
     const actions = document.createElement('div');
