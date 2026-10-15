@@ -89,7 +89,8 @@ function displayTeamStats() {
   });
 
   const teams = [...teamCounts.values()].sort((firstTeam, secondTeam) => (
-    firstTeam.name.localeCompare(secondTeam.name, undefined, { sensitivity: 'base' })
+    secondTeam.count - firstTeam.count
+    || firstTeam.name.localeCompare(secondTeam.name, undefined, { sensitivity: 'base' })
   ));
   const totalAppearances = teams.reduce((total, team) => total + team.count, 0);
 
