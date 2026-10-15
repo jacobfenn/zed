@@ -20,7 +20,7 @@ function loadEvents() {
       savedEvent
       && savedEvent.id
       && savedEvent.sport
-      && savedEvent.name
+      && (savedEvent.name || (savedEvent.homeTeam && savedEvent.awayTeam))
       && savedEvent.date
       && savedEvent.venue
       && !Number.isNaN(Date.parse(`${savedEvent.date}T12:00:00`))
@@ -48,13 +48,22 @@ function formatDate(date) {
   }).format(new Date(`${date}T12:00:00`));
 }
 
+function getMatchup(savedEvent) {
+  if (savedEvent.homeTeam && savedEvent.awayTeam) {
+    return `${savedEvent.homeTeam} vs. ${savedEvent.awayTeam}`;
+  }
+
+  return savedEvent.name;
+}
+
 function displayEvents() {
   eventList.replaceChildren();
   eventCount.textContent = events.length;
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
     sortOrder.value === 'team'
-      ? firstEvent.name.localeCompare(secondEvent.name)
+      ? (firstEvent.homeTeam || firstEvent.name).localeCompare(secondEvent.homeTeam || secondEvent.name)
+        || (firstEvent.awayTeam || '').localeCompare(secondEvent.awayTeam || '')
       : secondEvent.date.localeCompare(firstEvent.date)
   ));
   const selectedSport = sportFilter.value;
@@ -89,7 +98,7 @@ function displayEvents() {
     sport.textContent = savedEvent.sport;
 
     const name = document.createElement('h3');
-    name.textContent = savedEvent.name;
+    name.textContent = getMatchup(savedEvent);
 
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
@@ -98,7 +107,7 @@ function displayEvents() {
     deleteButton.className = 'delete-button';
     deleteButton.type = 'button';
     deleteButton.dataset.eventId = savedEvent.id;
-    deleteButton.setAttribute('aria-label', `Remove ${savedEvent.name}`);
+    deleteButton.setAttribute('aria-label', `Remove ${getMatchup(savedEvent)}`);
     deleteButton.textContent = '×';
 
     details.append(sport, name, venue);
@@ -114,14 +123,20 @@ eventForm.addEventListener('submit', (event) => {
   const newEvent = {
     id: String(Date.now()),
     sport: formData.get('sport'),
-    name: formData.get('name').trim(),
+    homeTeam: formData.get('homeTeam').trim(),
+    awayTeam: formData.get('awayTeam').trim(),
     date: formData.get('date'),
     venue: formData.get('venue').trim()
   };
 
-  if (!newEvent.name || !newEvent.venue) {
-    statusMessage.textContent = 'Enter a game or teams and a venue before saving.';
-    document.querySelector(!newEvent.name ? '#event-name' : '#event-venue').focus();
+  if (!newEvent.homeTeam || !newEvent.awayTeam || !newEvent.venue) {
+    statusMessage.textContent = 'Enter both teams and a venue before saving.';
+    const fieldToFocus = !newEvent.homeTeam
+      ? '#event-home-team'
+      : !newEvent.awayTeam
+        ? '#event-away-team'
+        : '#event-venue';
+    document.querySelector(fieldToFocus).focus();
     return;
   }
 
@@ -131,10 +146,10 @@ eventForm.addEventListener('submit', (event) => {
   sortOrder.value = 'date';
   displayEvents();
   statusMessage.textContent = wasSaved
-    ? `${newEvent.name} was added to your event log.`
+    ? `${getMatchup(newEvent)} was added to your event log.`
     : 'The game was added for now, but could not be saved in this browser.';
   eventForm.reset();
-  document.querySelector('#event-name').focus();
+  document.querySelector('#event-home-team').focus();
 });
 
 eventList.addEventListener('click', (event) => {
@@ -149,7 +164,7 @@ eventList.addEventListener('click', (event) => {
   const wasSaved = saveEvents();
   displayEvents();
   statusMessage.textContent = wasSaved
-    ? `${removedEvent.name} was removed from your event log.`
+    ? `${getMatchup(removedEvent)} was removed from your event log.`
     : 'The game was removed for now, but the change could not be saved.';
 });
 

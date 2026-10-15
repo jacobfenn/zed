@@ -11,10 +11,11 @@ async function read(relativePath) {
 test('the page has a labeled game form and an event list', async () => {
   const html = await read('index.html');
 
-  assert.match(html, /Games I've been to/);
+  assert.match(html, /Sporting Events I've been to/);
   assert.match(html, /id="event-form"/);
   assert.match(html, /for="event-sport"/);
-  assert.match(html, /for="event-name"/);
+  assert.match(html, /for="event-home-team"/);
+  assert.match(html, /for="event-away-team"/);
   assert.match(html, /for="event-date"/);
   assert.match(html, /for="event-venue"/);
   assert.match(html, /id="event-list"/);
@@ -33,6 +34,8 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /localStorage\.getItem\(STORAGE_KEY/);
   assert.match(app, /\.sort\(/);
   assert.match(app, /sortOrder\.value === 'team'/);
+  assert.match(app, /firstEvent\.homeTeam/);
+  assert.match(app, /secondEvent\.awayTeam/);
   assert.match(app, /sortOrder\.addEventListener\('change'/);
   assert.match(app, /sportFilter\.addEventListener\('change'/);
   assert.match(app, /deleteButton/);
@@ -44,5 +47,5 @@ test('the stylesheet includes visible focus and a narrow-screen layout', async (
 
   assert.match(css, /:focus-visible/);
   assert.match(css, /@media \(max-width: 760px\)/);
-  assert.match(css, /--green:/);
+  assert.match(css, /--primary:/);
 });
