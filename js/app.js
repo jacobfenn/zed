@@ -83,6 +83,18 @@ function getTeamNames(savedEvent) {
   return oldMatchup.length === 2 ? oldMatchup : [savedEvent.name || ''];
 }
 
+function getTcuResult(savedEvent) {
+  const homeIsTcu = (savedEvent.homeTeam || '').toLocaleLowerCase().includes('tcu');
+  const awayIsTcu = (savedEvent.awayTeam || '').toLocaleLowerCase().includes('tcu');
+
+  if (!savedEvent.winner || homeIsTcu === awayIsTcu) {
+    return '';
+  }
+
+  const tcuSide = homeIsTcu ? 'home' : 'away';
+  return savedEvent.winner === tcuSide ? 'win' : 'loss';
+}
+
 function appendTeamName(matchup, teamName, isWinner) {
   const team = document.createElement('span');
   team.textContent = teamName;
@@ -223,7 +235,19 @@ function displayEvents() {
     const date = document.createElement('time');
     date.className = 'event-date';
     date.dateTime = savedEvent.date;
-    date.textContent = formatDate(savedEvent.date);
+    const dateText = document.createElement('span');
+    dateText.textContent = formatDate(savedEvent.date);
+    date.append(dateText);
+
+    const tcuResult = getTcuResult(savedEvent);
+    if (tcuResult) {
+      date.classList.add(`event-date--tcu-${tcuResult}`);
+      const result = document.createElement('span');
+      result.className = 'event-date-result';
+      result.setAttribute('aria-label', `TCU ${tcuResult}`);
+      result.textContent = tcuResult === 'win' ? 'W' : 'L';
+      date.append(result);
+    }
 
     const details = document.createElement('div');
     details.className = 'event-details';

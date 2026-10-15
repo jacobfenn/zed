@@ -46,6 +46,8 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /firstEvent\.homeTeam/);
   assert.match(app, /secondEvent\.awayTeam/);
   assert.match(app, /function displayTeamStats\(/);
+  assert.match(app, /function getTcuResult\(/);
+  assert.match(app, /event-date--tcu-/);
   assert.match(app, /toLocaleLowerCase\(\)/);
   assert.match(app, /conic-gradient/);
   assert.match(app, /sortOrder\.addEventListener\('change'/);
