@@ -142,7 +142,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   min-height: 2.8rem;
   padding: 0.65rem 0.75rem;
@@ -152,13 +153,20 @@ select {
   color: var(--ink);
 }
 
-input::placeholder {
+textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
   color: #77717a;
   opacity: 1;
 }
 
 input:focus-visible,
 select:focus-visible,
+textarea:focus-visible,
 button:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
@@ -195,6 +203,72 @@ button:focus-visible {
   color: var(--ink);
   font-weight: 700;
   cursor: pointer;
+}
+
+.result-field {
+  min-width: 0;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.result-field legend {
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.result-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.result-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.result-toggle label {
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.result-toggle input:focus-visible + label {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+#result-none:checked + label {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+#result-win:checked + label {
+  border-color: #8dbb97;
+  background: #e8f3e9;
+  color: #205b35;
+}
+
+#result-loss:checked + label {
+  border-color: #e5a6aa;
+  background: #fff0f1;
+  color: #9f2f38;
 }
 
 .form-note {
@@ -314,6 +388,50 @@ button:focus-visible {
   margin: 0.15rem 0 0;
   color: var(--muted);
   font-size: 0.86rem;
+}
+
+.event-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.event-score {
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.result-badge {
+  display: inline-flex;
+  min-height: 1.55rem;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.result-win {
+  border-color: #8dbb97;
+  background: #e8f3e9;
+  color: #205b35;
+}
+
+.result-loss {
+  border-color: #e5a6aa;
+  background: #fff0f1;
+  color: #9f2f38;
+}
+
+.event-details .event-notes {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  white-space: pre-wrap;
 }
 
 .event-actions {

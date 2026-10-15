@@ -57,6 +57,24 @@
           <label for="event-venue">Venue</label>
           <input id="event-venue" name="venue" type="text" placeholder="Rocket Arena" required>
 
+          <label for="event-score">Final score</label>
+          <input id="event-score" name="score" type="text" placeholder="For example, 24-17">
+
+          <fieldset class="result-field">
+            <legend>Result</legend>
+            <div class="result-toggle" role="group" aria-label="Game result">
+              <input id="result-none" name="result" type="radio" value="" checked>
+              <label for="result-none">No result</label>
+              <input id="result-win" name="result" type="radio" value="win">
+              <label for="result-win">Win</label>
+              <input id="result-loss" name="result" type="radio" value="loss">
+              <label for="result-loss">Loss</label>
+            </div>
+          </fieldset>
+
+          <label for="event-notes">Notes (optional)</label>
+          <textarea id="event-notes" name="notes" rows="3" placeholder="Anything you want to remember"></textarea>
+
           <div class="form-actions">
             <button class="save-button" id="save-button" type="submit"><span aria-hidden="true">+</span> <span id="save-button-label">Save game</span></button>
             <button class="cancel-edit-button" id="cancel-edit" type="button" hidden>Cancel edit</button>

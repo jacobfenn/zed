@@ -20,6 +20,9 @@ test('the page has a labeled game form and an event list', async () => {
   assert.match(html, /for="event-away-team"/);
   assert.match(html, /for="event-date"/);
   assert.match(html, /for="event-venue"/);
+  assert.match(html, /for="event-score"/);
+  assert.match(html, /name="result"/);
+  assert.match(html, /for="event-notes"/);
   assert.match(html, /id="event-list"/);
   assert.match(html, /id="sort-order"/);
   assert.match(html, /Team \/ matchup A-Z/);
@@ -46,6 +49,10 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /sortOrder\.addEventListener\('change'/);
   assert.match(app, /sportFilter\.addEventListener\('change'/);
   assert.match(app, /deleteButton/);
+  assert.match(app, /formData\.get\('score'\)/);
+  assert.match(app, /formData\.get\('result'\)/);
+  assert.match(app, /formData\.get\('notes'\)/);
+  assert.match(app, /result-badge result-/);
   assert.match(app, /function editEvent\(/);
   assert.match(app, /cancelEditButton\.addEventListener/);
   assert.match(app, /catch \(error\)/);

@@ -59,10 +59,19 @@ function formatDate(date) {
 
 function getMatchup(savedEvent) {
   if (savedEvent.homeTeam && savedEvent.awayTeam) {
-    return `${savedEvent.homeTeam} vs. ${savedEvent.awayTeam}`;
+    return `${savedEvent.homeTeam} vs ${savedEvent.awayTeam}`;
   }
 
   return savedEvent.name;
+}
+
+function getDisplayedMatchup(savedEvent) {
+  if (savedEvent.homeTeam && savedEvent.awayTeam) {
+    return `${savedEvent.awayTeam} vs ${savedEvent.homeTeam}`;
+  }
+
+  const teams = getTeamNames(savedEvent);
+  return teams.length === 2 ? `${teams[1]} vs ${teams[0]}` : getMatchup(savedEvent);
 }
 
 function getTeamNames(savedEvent) {
@@ -90,6 +99,11 @@ function editEvent(savedEvent) {
   eventForm.elements.awayTeam.value = teams[1] || '';
   eventForm.elements.date.value = savedEvent.date;
   eventForm.elements.venue.value = savedEvent.venue;
+  eventForm.elements.score.value = savedEvent.score || '';
+  eventForm.elements.notes.value = savedEvent.notes || '';
+  eventForm.querySelectorAll('input[name="result"]').forEach((resultOption) => {
+    resultOption.checked = resultOption.value === (savedEvent.result || '');
+  });
   entryHeading.textContent = 'Edit game';
   saveButtonLabel.textContent = 'Save changes';
   cancelEditButton.hidden = false;
@@ -207,10 +221,38 @@ function displayEvents() {
     sport.textContent = savedEvent.sport;
 
     const name = document.createElement('h3');
-    name.textContent = getMatchup(savedEvent);
+    name.textContent = getDisplayedMatchup(savedEvent);
 
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
+
+    if (savedEvent.score || savedEvent.result) {
+      const gameResult = document.createElement('div');
+      gameResult.className = 'event-result';
+
+      if (savedEvent.score) {
+        const score = document.createElement('span');
+        score.className = 'event-score';
+        score.textContent = `Final: ${savedEvent.score}`;
+        gameResult.append(score);
+      }
+
+      if (savedEvent.result === 'win' || savedEvent.result === 'loss') {
+        const result = document.createElement('span');
+        result.className = `result-badge result-${savedEvent.result}`;
+        result.textContent = savedEvent.result === 'win' ? 'Win' : 'Loss';
+        gameResult.append(result);
+      }
+
+      details.append(gameResult);
+    }
+
+    if (savedEvent.notes) {
+      const notes = document.createElement('p');
+      notes.className = 'event-notes';
+      notes.textContent = savedEvent.notes;
+      details.append(notes);
+    }
 
     const actions = document.createElement('div');
     actions.className = 'event-actions';
@@ -219,14 +261,14 @@ function displayEvents() {
     editButton.className = 'edit-button';
     editButton.type = 'button';
     editButton.dataset.eventId = savedEvent.id;
-    editButton.setAttribute('aria-label', `Edit ${getMatchup(savedEvent)}`);
+    editButton.setAttribute('aria-label', `Edit ${getDisplayedMatchup(savedEvent)}`);
     editButton.textContent = 'Edit';
 
     const deleteButton = document.createElement('button');
     deleteButton.className = 'delete-button';
     deleteButton.type = 'button';
     deleteButton.dataset.eventId = savedEvent.id;
-    deleteButton.setAttribute('aria-label', `Remove ${getMatchup(savedEvent)}`);
+    deleteButton.setAttribute('aria-label', `Remove ${getDisplayedMatchup(savedEvent)}`);
     deleteButton.textContent = '×';
 
     details.append(sport, name, venue);
@@ -245,7 +287,10 @@ eventForm.addEventListener('submit', (event) => {
     homeTeam: formData.get('homeTeam').trim(),
     awayTeam: formData.get('awayTeam').trim(),
     date: formData.get('date'),
-    venue: formData.get('venue').trim()
+    venue: formData.get('venue').trim(),
+    score: formData.get('score').trim(),
+    result: formData.get('result'),
+    notes: formData.get('notes').trim()
   };
 
   if (!eventDetails.homeTeam || !eventDetails.awayTeam || !eventDetails.venue) {
