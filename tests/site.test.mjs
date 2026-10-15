@@ -54,7 +54,8 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /formData\.get\('score'\)/);
   assert.match(app, /formData\.get\('winner'\)/);
   assert.match(app, /formData\.get\('notes'\)/);
-  assert.match(app, /winner-badge/);
+  assert.match(app, /winning-team/);
+  assert.match(app, /winner-check/);
   assert.match(app, /function editEvent\(/);
   assert.match(app, /cancelEditButton\.addEventListener/);
   assert.match(app, /catch \(error\)/);

@@ -83,6 +83,24 @@ function getTeamNames(savedEvent) {
   return oldMatchup.length === 2 ? oldMatchup : [savedEvent.name || ''];
 }
 
+function appendTeamName(matchup, teamName, isWinner) {
+  const team = document.createElement('span');
+  team.textContent = teamName;
+
+  if (isWinner) {
+    team.className = 'winning-team';
+    team.setAttribute('aria-label', `${teamName}, winner`);
+
+    const check = document.createElement('span');
+    check.className = 'winner-check';
+    check.setAttribute('aria-hidden', 'true');
+    check.textContent = ' ✓';
+    team.append(check);
+  }
+
+  matchup.append(team);
+}
+
 function resetEventForm() {
   editingEventId = null;
   eventForm.reset();
@@ -221,15 +239,25 @@ function displayEvents() {
     sport.textContent = savedEvent.sport;
 
     const name = document.createElement('h3');
-    name.textContent = getDisplayedMatchup(savedEvent);
+    const teams = getTeamNames(savedEvent);
+
+    if (teams.length === 2) {
+      const awayTeam = savedEvent.awayTeam || teams[1];
+      const homeTeam = savedEvent.homeTeam || teams[0];
+      appendTeamName(name, awayTeam, savedEvent.winner === 'away');
+      name.append(document.createTextNode(' vs '));
+      appendTeamName(name, homeTeam, savedEvent.winner === 'home');
+    } else {
+      name.textContent = getDisplayedMatchup(savedEvent);
+    }
 
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
 
-    if (savedEvent.score || savedEvent.winner) {
-      const gameResult = document.createElement('div');
-      gameResult.className = 'event-result';
+    const gameResult = document.createElement('div');
+    gameResult.className = 'event-result';
 
+    if (savedEvent.score || savedEvent.winner) {
       if (savedEvent.score) {
         const score = document.createElement('span');
         score.className = 'event-score';
@@ -237,17 +265,6 @@ function displayEvents() {
         gameResult.append(score);
       }
 
-      if (savedEvent.winner === 'home' || savedEvent.winner === 'away') {
-        const winner = document.createElement('span');
-        const winningTeam = savedEvent.winner === 'home'
-          ? savedEvent.homeTeam
-          : savedEvent.awayTeam;
-        winner.className = 'winner-badge';
-        winner.textContent = `${winningTeam} won`;
-        gameResult.append(winner);
-      }
-
-      details.append(gameResult);
     }
 
     if (savedEvent.notes) {
@@ -277,7 +294,14 @@ function displayEvents() {
 
     details.append(sport, name, venue);
     actions.append(editButton, deleteButton);
-    item.append(date, details, actions);
+    item.append(date, details);
+
+    if (gameResult.childElementCount > 0) {
+      item.classList.add('event-row--has-result');
+      item.append(gameResult);
+    }
+
+    item.append(actions);
     eventList.append(item);
   });
 }
