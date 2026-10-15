@@ -265,7 +265,8 @@ function displayEvents() {
     editButton.type = 'button';
     editButton.dataset.eventId = savedEvent.id;
     editButton.setAttribute('aria-label', `Edit ${getDisplayedMatchup(savedEvent)}`);
-    editButton.textContent = 'Edit';
+    editButton.title = 'Edit game';
+    editButton.textContent = '✎';
 
     const deleteButton = document.createElement('button');
     deleteButton.className = 'delete-button';

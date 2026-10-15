@@ -404,7 +404,7 @@ button:focus-visible {
 }
 
 .edit-button {
-  min-width: 3.1rem;
+  width: 2.35rem;
   min-height: 2.35rem;
   padding: 0.35rem 0.45rem;
   border: 1px solid var(--line);
@@ -412,7 +412,7 @@ button:focus-visible {
   background: var(--surface);
   color: var(--primary);
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
