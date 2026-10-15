@@ -90,12 +90,6 @@ function appendTeamName(matchup, teamName, isWinner) {
   if (isWinner) {
     team.className = 'winning-team';
     team.setAttribute('aria-label', `${teamName}, winner`);
-
-    const check = document.createElement('span');
-    check.className = 'winner-check';
-    check.setAttribute('aria-hidden', 'true');
-    check.textContent = ' ✓';
-    team.append(check);
   }
 
   matchup.append(team);

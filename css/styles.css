@@ -387,10 +387,6 @@ button:focus-visible {
   font-weight: 800;
 }
 
-.winner-check {
-  font-size: 0.78em;
-}
-
 .event-details .event-notes {
   margin-top: 0.35rem;
   color: var(--muted);
