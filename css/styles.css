@@ -424,6 +424,23 @@ button:focus-visible {
   list-style: none;
 }
 
+.event-year-heading {
+  padding: 0.9rem 0 0.35rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--primary);
+}
+
+.event-year-heading:first-child {
+  padding-top: 0;
+}
+
+.event-year-heading h3 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
 .event-row {
   display: grid;
   grid-template-columns: 6.2rem minmax(0, 1fr) auto;

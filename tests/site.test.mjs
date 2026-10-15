@@ -53,6 +53,7 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /localStorage\.setItem\(STORAGE_KEY/);
   assert.match(app, /localStorage\.getItem\(STORAGE_KEY/);
   assert.match(app, /\.sort\(/);
+  assert.match(app, /event-year-heading/);
   assert.match(app, /sortOrder\.value === 'team'/);
   assert.match(app, /firstEvent\.homeTeam/);
   assert.match(app, /secondEvent\.awayTeam/);

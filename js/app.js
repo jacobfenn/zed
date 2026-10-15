@@ -341,8 +341,21 @@ function displayEvents() {
   }
 
   emptyState.hidden = true;
+  let lastYear = '';
 
   visibleEvents.forEach((savedEvent) => {
+    const year = savedEvent.date.slice(0, 4);
+
+    if (sortOrder.value !== 'team' && year !== lastYear) {
+      const yearRow = document.createElement('li');
+      const yearHeading = document.createElement('h3');
+      yearRow.className = 'event-year-heading';
+      yearHeading.textContent = year;
+      yearRow.append(yearHeading);
+      eventList.append(yearRow);
+      lastYear = year;
+    }
+
     const item = document.createElement('li');
     item.className = 'event-row';
 
