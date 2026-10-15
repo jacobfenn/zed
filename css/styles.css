@@ -389,7 +389,6 @@ button:focus-visible {
   border-radius: 4px;
   background: #e8f3e9;
   color: #111111;
-  font-weight: 800;
 }
 
 .event-details .event-notes {
