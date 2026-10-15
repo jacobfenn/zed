@@ -205,70 +205,44 @@ button:focus-visible {
   cursor: pointer;
 }
 
-.result-field {
-  min-width: 0;
-  margin: 0.55rem 0 0;
-  padding: 0;
-  border: 0;
+.team-entry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.result-field legend {
-  margin-bottom: 0.5rem;
-  color: var(--ink);
-  font-size: 0.86rem;
+.winner-control {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.winner-control input {
+  width: 1rem;
+  min-height: 1rem;
+  margin: 0;
+  accent-color: #307342;
+}
+
+.winner-control label {
+  margin: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
-.result-toggle {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.result-toggle input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  min-height: 0;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  clip-path: inset(50%);
-}
-
-.result-toggle label {
-  min-height: 2.4rem;
-  margin: 0;
-  padding: 0.45rem 0.7rem;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: var(--surface);
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 0.82rem;
-}
-
-.result-toggle input:focus-visible + label {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
-}
-
-#result-none:checked + label {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-#result-win:checked + label {
-  border-color: #8dbb97;
-  background: #e8f3e9;
+.winner-control input:checked + label {
   color: #205b35;
 }
 
-#result-loss:checked + label {
-  border-color: #e5a6aa;
-  background: #fff0f1;
-  color: #9f2f38;
+.winner-control input:focus-visible {
+  outline-offset: 3px;
+}
+
+.team-entry-row > input {
+  min-width: 0;
 }
 
 .form-note {
@@ -404,28 +378,17 @@ button:focus-visible {
   font-weight: 650;
 }
 
-.result-badge {
+.winner-badge {
   display: inline-flex;
   min-height: 1.55rem;
   align-items: center;
   padding: 0.15rem 0.5rem;
-  border: 1px solid;
+  border: 1px solid #8dbb97;
   border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.result-win {
-  border-color: #8dbb97;
   background: #e8f3e9;
   color: #205b35;
-}
-
-.result-loss {
-  border-color: #e5a6aa;
-  background: #fff0f1;
-  color: #9f2f38;
+  font-size: 0.72rem;
+  font-weight: 800;
 }
 
 .event-details .event-notes {

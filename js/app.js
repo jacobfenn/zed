@@ -101,8 +101,8 @@ function editEvent(savedEvent) {
   eventForm.elements.venue.value = savedEvent.venue;
   eventForm.elements.score.value = savedEvent.score || '';
   eventForm.elements.notes.value = savedEvent.notes || '';
-  eventForm.querySelectorAll('input[name="result"]').forEach((resultOption) => {
-    resultOption.checked = resultOption.value === (savedEvent.result || '');
+  eventForm.querySelectorAll('input[name="winner"]').forEach((winnerOption) => {
+    winnerOption.checked = winnerOption.value === (savedEvent.winner || '');
   });
   entryHeading.textContent = 'Edit game';
   saveButtonLabel.textContent = 'Save changes';
@@ -226,7 +226,7 @@ function displayEvents() {
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
 
-    if (savedEvent.score || savedEvent.result) {
+    if (savedEvent.score || savedEvent.winner) {
       const gameResult = document.createElement('div');
       gameResult.className = 'event-result';
 
@@ -237,11 +237,14 @@ function displayEvents() {
         gameResult.append(score);
       }
 
-      if (savedEvent.result === 'win' || savedEvent.result === 'loss') {
-        const result = document.createElement('span');
-        result.className = `result-badge result-${savedEvent.result}`;
-        result.textContent = savedEvent.result === 'win' ? 'Win' : 'Loss';
-        gameResult.append(result);
+      if (savedEvent.winner === 'home' || savedEvent.winner === 'away') {
+        const winner = document.createElement('span');
+        const winningTeam = savedEvent.winner === 'home'
+          ? savedEvent.homeTeam
+          : savedEvent.awayTeam;
+        winner.className = 'winner-badge';
+        winner.textContent = `${winningTeam} won`;
+        gameResult.append(winner);
       }
 
       details.append(gameResult);
@@ -289,7 +292,7 @@ eventForm.addEventListener('submit', (event) => {
     date: formData.get('date'),
     venue: formData.get('venue').trim(),
     score: formData.get('score').trim(),
-    result: formData.get('result'),
+    winner: formData.get('winner') || '',
     notes: formData.get('notes').trim()
   };
 

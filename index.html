@@ -46,10 +46,22 @@
           </select>
 
           <label for="event-home-team">Home team</label>
-          <input id="event-home-team" name="homeTeam" type="text" placeholder="Cleveland Cavaliers" required>
+          <div class="team-entry-row">
+            <input id="event-home-team" name="homeTeam" type="text" placeholder="Cleveland Cavaliers" required>
+            <div class="winner-control">
+              <input id="winner-home" name="winner" type="radio" value="home" aria-label="Home team won">
+              <label for="winner-home">Won</label>
+            </div>
+          </div>
 
           <label for="event-away-team">Away team</label>
-          <input id="event-away-team" name="awayTeam" type="text" placeholder="New York Knicks" required>
+          <div class="team-entry-row">
+            <input id="event-away-team" name="awayTeam" type="text" placeholder="New York Knicks" required>
+            <div class="winner-control">
+              <input id="winner-away" name="winner" type="radio" value="away" aria-label="Away team won">
+              <label for="winner-away">Won</label>
+            </div>
+          </div>
 
           <label for="event-date">Date</label>
           <input id="event-date" name="date" type="date" required>
@@ -59,18 +71,6 @@
 
           <label for="event-score">Final score</label>
           <input id="event-score" name="score" type="text" placeholder="For example, 24-17">
-
-          <fieldset class="result-field">
-            <legend>Result</legend>
-            <div class="result-toggle" role="group" aria-label="Game result">
-              <input id="result-none" name="result" type="radio" value="" checked>
-              <label for="result-none">No result</label>
-              <input id="result-win" name="result" type="radio" value="win">
-              <label for="result-win">Win</label>
-              <input id="result-loss" name="result" type="radio" value="loss">
-              <label for="result-loss">Loss</label>
-            </div>
-          </fieldset>
 
           <label for="event-notes">Notes (optional)</label>
           <textarea id="event-notes" name="notes" rows="3" placeholder="Anything you want to remember"></textarea>
