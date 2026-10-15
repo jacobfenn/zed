@@ -6,6 +6,11 @@ const emptyState = document.querySelector('#empty-state');
 const statusMessage = document.querySelector('#status-message');
 const sportFilter = document.querySelector('#sport-filter');
 const sortOrder = document.querySelector('#sort-order');
+const teamStatsContent = document.querySelector('#team-stats-content');
+const teamStatsEmpty = document.querySelector('#team-stats-empty');
+const teamChart = document.querySelector('#team-chart');
+const teamLegend = document.querySelector('#team-legend');
+const chartColors = ['#702340', '#c94f54', '#315f85', '#d59b3c', '#527760', '#71588b', '#547c88', '#9a6651'];
 let events = loadEvents();
 
 function loadEvents() {
@@ -56,9 +61,84 @@ function getMatchup(savedEvent) {
   return savedEvent.name;
 }
 
+function getTeamNames(savedEvent) {
+  if (savedEvent.homeTeam && savedEvent.awayTeam) {
+    return [savedEvent.homeTeam, savedEvent.awayTeam];
+  }
+
+  const oldMatchup = (savedEvent.name || '').split(/\s+vs\.?\s+/i);
+  return oldMatchup.length === 2 ? oldMatchup : [savedEvent.name || ''];
+}
+
+function displayTeamStats() {
+  const teamCounts = new Map();
+
+  events.forEach((savedEvent) => {
+    getTeamNames(savedEvent).forEach((teamName) => {
+      const name = teamName.trim();
+      const key = name.toLocaleLowerCase();
+
+      if (!key) {
+        return;
+      }
+
+      const team = teamCounts.get(key) || { name, count: 0 };
+      team.count += 1;
+      teamCounts.set(key, team);
+    });
+  });
+
+  const teams = [...teamCounts.values()].sort((firstTeam, secondTeam) => (
+    firstTeam.name.localeCompare(secondTeam.name, undefined, { sensitivity: 'base' })
+  ));
+  const totalAppearances = teams.reduce((total, team) => total + team.count, 0);
+
+  teamLegend.replaceChildren();
+  teamStatsEmpty.hidden = totalAppearances > 0;
+  teamStatsContent.hidden = totalAppearances === 0;
+
+  if (totalAppearances === 0) {
+    return;
+  }
+
+  let endAngle = 0;
+  const segments = teams.map((team, index) => {
+    const startAngle = endAngle;
+    endAngle += (team.count / totalAppearances) * 100;
+    const color = chartColors[index % chartColors.length];
+    const percentage = ((team.count / totalAppearances) * 100).toFixed(1);
+    const item = document.createElement('li');
+    const swatch = document.createElement('span');
+    const name = document.createElement('span');
+    const count = document.createElement('span');
+    const percent = document.createElement('span');
+
+    swatch.className = 'team-swatch';
+    swatch.style.backgroundColor = color;
+    swatch.setAttribute('aria-hidden', 'true');
+    name.className = 'team-legend-name';
+    name.textContent = team.name;
+    count.className = 'team-appearance-count';
+    count.textContent = `${team.count} ${team.count === 1 ? 'appearance' : 'appearances'}`;
+    percent.className = 'team-legend-percent';
+    percent.textContent = `${percentage}%`;
+
+    item.append(swatch, name, count, percent);
+    teamLegend.append(item);
+
+    return `${color} ${startAngle}% ${endAngle}%`;
+  });
+
+  teamChart.style.background = `conic-gradient(${segments.join(', ')})`;
+  teamChart.setAttribute('aria-label', `Team appearances: ${teams.map((team) => (
+    `${team.name}, ${((team.count / totalAppearances) * 100).toFixed(1)} percent`
+  )).join('; ')}`);
+}
+
 function displayEvents() {
   eventList.replaceChildren();
   eventCount.textContent = events.length;
+  displayTeamStats();
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
     sortOrder.value === 'team'

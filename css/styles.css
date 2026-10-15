@@ -317,6 +317,90 @@ button:focus-visible {
   color: var(--accent);
 }
 
+.team-stats {
+  margin-top: 2.5rem;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.team-stats-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.team-stats-header .eyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.team-stats-header h2 {
+  margin-bottom: 0;
+  font-size: 1.65rem;
+}
+
+.team-stats-note,
+.team-stats-empty {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.team-stats-content {
+  display: grid;
+  grid-template-columns: minmax(180px, 250px) minmax(0, 1fr);
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.team-chart {
+  width: min(100%, 240px);
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.team-legend {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team-legend li {
+  display: grid;
+  grid-template-columns: 0.85rem minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.team-swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 2px;
+}
+
+.team-legend-name {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.team-appearance-count {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.team-legend-percent {
+  min-width: 3.5rem;
+  font-weight: 750;
+  text-align: right;
+}
+
 .page-footer {
   display: flex;
   justify-content: space-between;
@@ -372,6 +456,29 @@ button:focus-visible {
   .log-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .team-stats-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .team-stats-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .team-chart {
+    width: min(68vw, 220px);
+    margin: 0 auto;
+  }
+
+  .team-legend li {
+    grid-template-columns: 0.85rem minmax(0, 1fr) auto;
+  }
+
+  .team-appearance-count {
+    display: none;
   }
 
   .event-row {

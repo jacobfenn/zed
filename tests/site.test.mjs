@@ -21,6 +21,8 @@ test('the page has a labeled game form and an event list', async () => {
   assert.match(html, /id="event-list"/);
   assert.match(html, /id="sort-order"/);
   assert.match(html, /Team \/ matchup A-Z/);
+  assert.match(html, /id="team-chart"/);
+  assert.match(html, /id="team-legend"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /js\/app\.js/);
   assert.match(html, /css\/styles\.css/);
@@ -36,6 +38,9 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /sortOrder\.value === 'team'/);
   assert.match(app, /firstEvent\.homeTeam/);
   assert.match(app, /secondEvent\.awayTeam/);
+  assert.match(app, /function displayTeamStats\(/);
+  assert.match(app, /toLocaleLowerCase\(\)/);
+  assert.match(app, /conic-gradient/);
   assert.match(app, /sortOrder\.addEventListener\('change'/);
   assert.match(app, /sportFilter\.addEventListener\('change'/);
   assert.match(app, /deleteButton/);
