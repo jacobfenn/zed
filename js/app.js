@@ -10,7 +10,11 @@ const teamStatsContent = document.querySelector('#team-stats-content');
 const teamStatsEmpty = document.querySelector('#team-stats-empty');
 const teamChart = document.querySelector('#team-chart');
 const teamLegend = document.querySelector('#team-legend');
+const entryHeading = document.querySelector('#entry-heading');
+const saveButtonLabel = document.querySelector('#save-button-label');
+const cancelEditButton = document.querySelector('#cancel-edit');
 const chartColors = ['#702340', '#c94f54', '#315f85', '#d59b3c', '#527760', '#71588b', '#547c88', '#9a6651'];
+let editingEventId = null;
 let events = loadEvents();
 
 function loadEvents() {
@@ -68,6 +72,30 @@ function getTeamNames(savedEvent) {
 
   const oldMatchup = (savedEvent.name || '').split(/\s+vs\.?\s+/i);
   return oldMatchup.length === 2 ? oldMatchup : [savedEvent.name || ''];
+}
+
+function resetEventForm() {
+  editingEventId = null;
+  eventForm.reset();
+  entryHeading.textContent = 'Add a game';
+  saveButtonLabel.textContent = 'Save game';
+  cancelEditButton.hidden = true;
+}
+
+function editEvent(savedEvent) {
+  const teams = getTeamNames(savedEvent);
+  editingEventId = savedEvent.id;
+  eventForm.elements.sport.value = savedEvent.sport;
+  eventForm.elements.homeTeam.value = teams[0] || '';
+  eventForm.elements.awayTeam.value = teams[1] || '';
+  eventForm.elements.date.value = savedEvent.date;
+  eventForm.elements.venue.value = savedEvent.venue;
+  entryHeading.textContent = 'Edit game';
+  saveButtonLabel.textContent = 'Save changes';
+  cancelEditButton.hidden = false;
+  statusMessage.textContent = `Editing ${getMatchup(savedEvent)}.`;
+  eventForm.scrollIntoView({ block: 'start' });
+  eventForm.elements.homeTeam.focus();
 }
 
 function displayTeamStats() {
@@ -184,6 +212,16 @@ function displayEvents() {
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
 
+    const actions = document.createElement('div');
+    actions.className = 'event-actions';
+
+    const editButton = document.createElement('button');
+    editButton.className = 'edit-button';
+    editButton.type = 'button';
+    editButton.dataset.eventId = savedEvent.id;
+    editButton.setAttribute('aria-label', `Edit ${getMatchup(savedEvent)}`);
+    editButton.textContent = 'Edit';
+
     const deleteButton = document.createElement('button');
     deleteButton.className = 'delete-button';
     deleteButton.type = 'button';
@@ -192,7 +230,8 @@ function displayEvents() {
     deleteButton.textContent = '×';
 
     details.append(sport, name, venue);
-    item.append(date, details, deleteButton);
+    actions.append(editButton, deleteButton);
+    item.append(date, details, actions);
     eventList.append(item);
   });
 }
@@ -201,8 +240,7 @@ eventForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const formData = new FormData(eventForm);
-  const newEvent = {
-    id: String(Date.now()),
+  const eventDetails = {
     sport: formData.get('sport'),
     homeTeam: formData.get('homeTeam').trim(),
     awayTeam: formData.get('awayTeam').trim(),
@@ -210,30 +248,56 @@ eventForm.addEventListener('submit', (event) => {
     venue: formData.get('venue').trim()
   };
 
-  if (!newEvent.homeTeam || !newEvent.awayTeam || !newEvent.venue) {
+  if (!eventDetails.homeTeam || !eventDetails.awayTeam || !eventDetails.venue) {
     statusMessage.textContent = 'Enter both teams and a venue before saving.';
-    const fieldToFocus = !newEvent.homeTeam
+    const fieldToFocus = !eventDetails.homeTeam
       ? '#event-home-team'
-      : !newEvent.awayTeam
+      : !eventDetails.awayTeam
         ? '#event-away-team'
         : '#event-venue';
     document.querySelector(fieldToFocus).focus();
     return;
   }
 
-  events.push(newEvent);
+  const wasEditing = editingEventId !== null;
+  let savedEvent;
+
+  if (wasEditing) {
+    events = events.map((existingEvent) => (
+      existingEvent.id === editingEventId
+        ? { ...existingEvent, ...eventDetails }
+        : existingEvent
+    ));
+    savedEvent = events.find((existingEvent) => existingEvent.id === editingEventId);
+  } else {
+    savedEvent = { id: String(Date.now()), ...eventDetails };
+    events.push(savedEvent);
+  }
+
   const wasSaved = saveEvents();
   sportFilter.value = 'all';
   sortOrder.value = 'date';
   displayEvents();
+  resetEventForm();
   statusMessage.textContent = wasSaved
-    ? `${getMatchup(newEvent)} was added to your event log.`
-    : 'The game was added for now, but could not be saved in this browser.';
-  eventForm.reset();
+    ? `${getMatchup(savedEvent)} was ${wasEditing ? 'updated' : 'added'} in your event log.`
+    : `The game was ${wasEditing ? 'updated' : 'added'} for now, but could not be saved in this browser.`;
   document.querySelector('#event-home-team').focus();
 });
 
 eventList.addEventListener('click', (event) => {
+  const editButton = event.target.closest('.edit-button');
+
+  if (editButton) {
+    const eventToEdit = events.find((savedEvent) => savedEvent.id === editButton.dataset.eventId);
+
+    if (eventToEdit) {
+      editEvent(eventToEdit);
+    }
+
+    return;
+  }
+
   const deleteButton = event.target.closest('.delete-button');
 
   if (!deleteButton) {
@@ -241,12 +305,21 @@ eventList.addEventListener('click', (event) => {
   }
 
   const removedEvent = events.find((savedEvent) => savedEvent.id === deleteButton.dataset.eventId);
+  if (editingEventId === removedEvent.id) {
+    resetEventForm();
+  }
   events = events.filter((savedEvent) => savedEvent.id !== deleteButton.dataset.eventId);
   const wasSaved = saveEvents();
   displayEvents();
   statusMessage.textContent = wasSaved
     ? `${getMatchup(removedEvent)} was removed from your event log.`
     : 'The game was removed for now, but the change could not be saved.';
+});
+
+cancelEditButton.addEventListener('click', () => {
+  resetEventForm();
+  statusMessage.textContent = 'Edit cancelled.';
+  document.querySelector('#event-home-team').focus();
 });
 
 sportFilter.addEventListener('change', displayEvents);

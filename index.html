@@ -16,7 +16,7 @@
 
     <header class="page-header">
       <div>
-        <p class="eyebrow">A personal record</p>
+        <p class="eyebrow">Game Log</p>
         <h1>Sporting Events I've been to</h1>
         <p class="page-intro">Every match you've been to... in one place.</p>
       </div>
@@ -57,7 +57,10 @@
           <label for="event-venue">Venue</label>
           <input id="event-venue" name="venue" type="text" placeholder="Rocket Arena" required>
 
-          <button class="save-button" type="submit"><span aria-hidden="true">+</span> Save game</button>
+          <div class="form-actions">
+            <button class="save-button" id="save-button" type="submit"><span aria-hidden="true">+</span> <span id="save-button-label">Save game</span></button>
+            <button class="cancel-edit-button" id="cancel-edit" type="button" hidden>Cancel edit</button>
+          </div>
         </form>
         <p class="form-note">Your event list is saved in this browser.</p>
 
@@ -120,7 +123,6 @@
     </section>
 
     <footer class="page-footer">
-      <span>GAME LOG</span>
       <span>Saved on this device</span>
     </footer>
   </main>

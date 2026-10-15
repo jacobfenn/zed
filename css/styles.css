@@ -127,6 +127,13 @@ h1 {
   gap: 0.5rem;
 }
 
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+
 label {
   margin-top: 0.55rem;
   color: var(--ink);
@@ -159,7 +166,6 @@ button:focus-visible {
 
 .save-button {
   min-height: 2.9rem;
-  margin-top: 0.85rem;
   padding: 0.65rem 1rem;
   border: 0;
   border-radius: 4px;
@@ -178,6 +184,17 @@ button:focus-visible {
   margin-right: 0.35rem;
   color: var(--accent-light);
   font-size: 1.2rem;
+}
+
+.cancel-edit-button {
+  min-height: 2.9rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .form-note {
@@ -253,7 +270,7 @@ button:focus-visible {
 
 .event-row {
   display: grid;
-  grid-template-columns: 6.2rem minmax(0, 1fr) 2.5rem;
+  grid-template-columns: 6.2rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 1rem;
   min-height: 6.3rem;
@@ -297,6 +314,30 @@ button:focus-visible {
   margin: 0.15rem 0 0;
   color: var(--muted);
   font-size: 0.86rem;
+}
+
+.event-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.edit-button {
+  min-width: 3.1rem;
+  min-height: 2.35rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.edit-button:hover {
+  border-color: var(--primary);
+  background: #f8f0f3;
 }
 
 .delete-button {
@@ -482,8 +523,12 @@ button:focus-visible {
   }
 
   .event-row {
-    grid-template-columns: 4.8rem minmax(0, 1fr) 2.35rem;
+    grid-template-columns: 4.8rem minmax(0, 1fr) auto;
     gap: 0.65rem;
+  }
+
+  .event-actions {
+    flex-direction: column;
   }
 
   .page-footer {

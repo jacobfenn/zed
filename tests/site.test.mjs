@@ -14,6 +14,8 @@ test('the page has a labeled game form and an event list', async () => {
   assert.match(html, /Sporting Events I've been to/);
   assert.match(html, /id="event-form"/);
   assert.match(html, /for="event-sport"/);
+  assert.match(html, /id="save-button-label"/);
+  assert.match(html, /id="cancel-edit"/);
   assert.match(html, /for="event-home-team"/);
   assert.match(html, /for="event-away-team"/);
   assert.match(html, /for="event-date"/);
@@ -44,6 +46,8 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /sortOrder\.addEventListener\('change'/);
   assert.match(app, /sportFilter\.addEventListener\('change'/);
   assert.match(app, /deleteButton/);
+  assert.match(app, /function editEvent\(/);
+  assert.match(app, /cancelEditButton\.addEventListener/);
   assert.match(app, /catch \(error\)/);
 });
 
