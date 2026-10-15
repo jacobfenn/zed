@@ -10,7 +10,6 @@ const eventCount = document.querySelector('#event-count');
 const emptyState = document.querySelector('#empty-state');
 const statusMessage = document.querySelector('#status-message');
 const sportFilter = document.querySelector('#sport-filter');
-const sortOrder = document.querySelector('#sort-order');
 const teamStatsContent = document.querySelector('#team-stats-content');
 const teamStatsEmpty = document.querySelector('#team-stats-empty');
 const teamChart = document.querySelector('#team-chart');
@@ -322,10 +321,7 @@ function displayEvents() {
   displayFavoriteRecord();
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
-    sortOrder.value === 'team'
-      ? (firstEvent.homeTeam || firstEvent.name).localeCompare(secondEvent.homeTeam || secondEvent.name)
-        || (firstEvent.awayTeam || '').localeCompare(secondEvent.awayTeam || '')
-      : secondEvent.date.localeCompare(firstEvent.date)
+    secondEvent.date.localeCompare(firstEvent.date)
   ));
   const selectedSport = sportFilter.value;
   const visibleEvents = sortedEvents.filter((savedEvent) => (
@@ -346,7 +342,7 @@ function displayEvents() {
   visibleEvents.forEach((savedEvent) => {
     const year = savedEvent.date.slice(0, 4);
 
-    if (sortOrder.value !== 'team' && year !== lastYear) {
+    if (year !== lastYear) {
       const yearRow = document.createElement('li');
       const yearHeading = document.createElement('h3');
       yearRow.className = 'event-year-heading';
@@ -536,7 +532,6 @@ eventForm.addEventListener('submit', (event) => {
 
   const wasSaved = saveEvents();
   sportFilter.value = 'all';
-  sortOrder.value = 'date';
   displayEvents();
   resetEventForm();
   statusMessage.textContent = wasSaved
@@ -583,6 +578,5 @@ cancelEditButton.addEventListener('click', () => {
 });
 
 sportFilter.addEventListener('change', displayEvents);
-sortOrder.addEventListener('change', displayEvents);
 displayFavoriteTeams();
 displayEvents();
