@@ -192,8 +192,10 @@ function displayFavoriteRecord() {
   const losses = results.filter((result) => result === 'loss').length;
   const totalResults = wins + losses;
 
+
   favoriteRecordEmpty.hidden = totalResults > 0;
   favoriteRecordContent.hidden = totalResults === 0;
+
 
   if (totalResults === 0) {
     favoriteRecordEmpty.textContent = favoriteTeams.length === 0
@@ -233,6 +235,7 @@ function displayVenueStats() {
     || firstVenue.name.localeCompare(secondVenue.name, undefined, { sensitivity: 'base' })
   ));
 
+
   venueStatsList.replaceChildren();
   venueStatsEmpty.hidden = venues.length > 0;
   venueStatsList.hidden = venues.length === 0;
@@ -240,6 +243,8 @@ function displayVenueStats() {
   if (venues.length === 0) {
     return;
   }
+
+  
 
   const mostVisits = venues[0].count;
   venues.forEach((venue, index) => {
