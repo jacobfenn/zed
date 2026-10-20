@@ -703,13 +703,15 @@ button:focus-visible {
 
 .team-stats-content {
   display: grid;
-  grid-template-columns: minmax(180px, 250px) minmax(0, 1fr);
-  align-items: center;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  align-items: start;
   gap: 2rem;
   padding: 1rem 0;
 }
 
 .team-chart {
+  position: sticky;
+  top: 1rem;
   width: min(100%, 240px);
   aspect-ratio: 1;
   border: 1px solid var(--line);
@@ -718,19 +720,23 @@ button:focus-visible {
 
 .team-legend {
   display: grid;
-  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0 1.5rem;
+  max-height: 22rem;
   margin: 0;
-  padding: 0;
+  padding: 0 0.5rem 0 0;
+  overflow-y: auto;
   list-style: none;
 }
 
 .team-legend li {
   display: grid;
-  grid-template-columns: 0.85rem minmax(0, 1fr) auto auto;
+  grid-template-columns: 0.75rem minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 0.65rem;
-  padding-bottom: 0.55rem;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
   border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
 }
 
 .team-swatch {
@@ -1093,12 +1099,18 @@ button:focus-visible {
   }
 
   .team-chart {
+    position: static;
     width: min(68vw, 220px);
     margin: 0 auto;
   }
 
+  .team-legend {
+    grid-template-columns: 1fr;
+    max-height: 18rem;
+  }
+
   .team-legend li {
-    grid-template-columns: 0.85rem minmax(0, 1fr) auto;
+    grid-template-columns: 0.75rem minmax(0, 1fr) auto;
   }
 
   .team-appearance-count {
