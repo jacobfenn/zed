@@ -84,6 +84,41 @@ test('the application saves, sorts, filters, and removes events', async () => {
   assert.match(app, /catch \(error\)/);
 });
 
+test('the map section, venue data, and lookup script are wired in', async () => {
+  const html = await read('index.html');
+  const map = await read('js/map.js');
+  const venues = await read('data/venues.js');
+
+  assert.match(html, /id="venue-map"/);
+  assert.match(html, /id="unlocated-list"/);
+  assert.match(html, /list="venue-options"/);
+  assert.match(html, /<option>NHL<\/option>/);
+  assert.match(html, /leaflet@1\.9\.4/);
+  assert.match(html, /data\/venues\.js/);
+  assert.match(html, /js\/map\.js/);
+  assert.match(map, /function displayMap\(/);
+  assert.match(map, /function locateEvent\(/);
+  assert.match(venues, /Aviva Stadium/);
+  assert.match(venues, /Amon G\. Carter Stadium/);
+});
+
+test('team names resolve to their home venues by sport', async () => {
+  const source = await read('data/venues.js');
+  const { findHomeVenue, normalizeName, KNOWN_VENUES } = new Function(
+    `${source}; return { findHomeVenue, normalizeName, KNOWN_VENUES };`
+  )();
+
+  assert.equal(findHomeVenue('Cowboys', 'NFL').name, 'AT&T Stadium');
+  assert.equal(findHomeVenue('TCU', 'College Football').name, 'Amon G. Carter Stadium');
+  assert.equal(findHomeVenue('New York Giants', 'NFL').name, 'MetLife Stadium');
+  assert.equal(findHomeVenue('Giants', 'MLB').name, 'Oracle Park');
+  assert.equal(findHomeVenue('Los Angeles', 'NBA'), null);
+  assert.equal(findHomeVenue('Tigers', 'College Football'), null);
+  assert.equal(findHomeVenue('Cowboys', 'College Basketball'), null);
+  assert.equal(normalizeName('Texas A&M'), 'texas a and m');
+  assert.ok(KNOWN_VENUES.every((venue) => Number.isFinite(venue.lat) && Number.isFinite(venue.lng)));
+});
+
 test('the stylesheet includes visible focus and a narrow-screen layout', async () => {
   const css = await read('css/styles.css');
 

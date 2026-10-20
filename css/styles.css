@@ -903,6 +903,109 @@ button:focus-visible {
   background: var(--primary);
 }
 
+.map-section {
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.map-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.map-header h2 {
+  margin: 0.3rem 0 0;
+  font-size: 1.55rem;
+}
+
+.map-summary,
+.map-status,
+.map-unavailable {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.map-status {
+  margin-bottom: 0.6rem;
+}
+
+.venue-map {
+  height: min(60vh, 480px);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--accent-light);
+}
+
+.venue-map--picking {
+  cursor: crosshair;
+}
+
+.venue-map--picking .leaflet-interactive {
+  cursor: crosshair;
+}
+
+.map-popup-detail {
+  margin: 0.2rem 0 0.4rem;
+  color: var(--muted);
+}
+
+.map-popup-games {
+  margin: 0 0 0.5rem;
+  padding-left: 1rem;
+}
+
+.map-action-button,
+.map-popup-button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.map-action-button:hover,
+.map-popup-button:hover {
+  background: var(--accent-light);
+}
+
+.map-action-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.unlocated-venues h3 {
+  margin: 1rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.unlocated-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unlocated-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unlocated-list li span {
+  flex: 1 1 12rem;
+  overflow-wrap: anywhere;
+}
+
 .page-footer {
   display: flex;
   justify-content: space-between;

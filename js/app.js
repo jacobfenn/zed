@@ -31,6 +31,7 @@ const saveButtonLabel = document.querySelector('#save-button-label');
 const cancelEditButton = document.querySelector('#cancel-edit');
 const chartColors = ['#702340', '#c94f54', '#315f85', '#d59b3c', '#527760', '#71588b', '#547c88', '#9a6651'];
 let editingEventId = null;
+let venueWasAutofilled = false;
 let events = loadEvents();
 let favoriteTeams = loadFavoriteTeams();
 
@@ -284,6 +285,7 @@ function appendTeamName(matchup, teamName, isWinner) {
 
 function resetEventForm() {
   editingEventId = null;
+  venueWasAutofilled = false;
   eventForm.reset();
   entryHeading.textContent = 'Add a game';
   saveButtonLabel.textContent = 'Save game';
@@ -293,6 +295,7 @@ function resetEventForm() {
 function editEvent(savedEvent) {
   const teams = getTeamNames(savedEvent);
   editingEventId = savedEvent.id;
+  venueWasAutofilled = false;
   eventForm.elements.sport.value = savedEvent.sport;
   eventForm.elements.homeTeam.value = teams[0] || '';
   eventForm.elements.awayTeam.value = teams[1] || '';
@@ -383,6 +386,7 @@ function displayEvents() {
   displayTeamStats();
   displayFavoriteRecord();
   displayVenueStats();
+  displayMap();
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
     secondEvent.date.localeCompare(firstEvent.date)
@@ -602,6 +606,24 @@ eventForm.addEventListener('submit', (event) => {
     ? `${getMatchup(savedEvent)} was ${wasEditing ? 'updated' : 'added'} in your event log.`
     : `The game was ${wasEditing ? 'updated' : 'added'} for now, but could not be saved in this browser.`;
   document.querySelector('#event-home-team').focus();
+  ensureVenueLocation(savedEvent);
+});
+
+// Fills the venue from the home team's stadium unless the user typed their own.
+function suggestVenue() {
+  const venue = findHomeVenue(eventForm.elements.homeTeam.value, eventForm.elements.sport.value);
+  const venueInput = eventForm.elements.venue;
+
+  if (venue && (!venueInput.value.trim() || venueWasAutofilled)) {
+    venueInput.value = venue.name;
+    venueWasAutofilled = true;
+  }
+}
+
+eventForm.elements.homeTeam.addEventListener('change', suggestVenue);
+eventForm.elements.sport.addEventListener('change', suggestVenue);
+eventForm.elements.venue.addEventListener('input', () => {
+  venueWasAutofilled = false;
 });
 
 eventList.addEventListener('click', (event) => {

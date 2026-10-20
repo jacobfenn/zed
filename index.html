@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A personal log of sporting events you have attended.">
   <title>Game Log | Sports Event Tracker</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -39,8 +40,9 @@
         <li>Add teams you follow in <strong>Favorite teams</strong> to track their results.</li>
         <li>In <strong>Add a game</strong>, enter the sport, teams, date, and venue. Score and notes are optional.</li>
         <li>Select <strong>Won</strong> beside the winner. Favorite-team results update the W/L markers and overall record.</li>
+        <li>Pick a venue from the list (or type a home team and it fills in) and the game gets a pin on <strong>Your game map</strong>.</li>
       </ol>
-      <p class="guide-privacy">Games and favorites are saved in this browser and are not sent to a server.</p>
+      <p class="guide-privacy">Games and favorites are saved in this browser and are not sent to a server. The map loads tiles from OpenStreetMap, and a venue we don't know is sent to OpenStreetMap to look up its location.</p>
     </dialog>
 
     <section class="favorites-section" aria-labelledby="favorites-heading">
@@ -76,6 +78,7 @@
             <option>MLB</option>
             <option>NBA</option>
             <option>NFL</option>
+            <option>NHL</option>
             <option>Other</option>
 
 
@@ -103,7 +106,8 @@
           <input id="event-date" name="date" type="date" required>
 
           <label for="event-venue">Venue</label>
-          <input id="event-venue" name="venue" type="text" placeholder="Amon G. Carter Stadium" required>
+          <input id="event-venue" name="venue" type="text" list="venue-options" placeholder="Amon G. Carter Stadium" required>
+          <datalist id="venue-options"></datalist>
 
           <label for="event-score">Final score</label>
           <input id="event-score" name="score" type="text" placeholder="For example, 24-17">
@@ -140,6 +144,7 @@
                 <option>MLB</option>
                 <option>NBA</option>
                 <option>NFL</option>
+                <option>NHL</option>
                 <option>Other</option>
               </select>
             </div>
@@ -153,6 +158,24 @@
 
 
     </div>
+
+    <section class="map-section" aria-labelledby="map-heading">
+      <div class="map-header">
+        <div>
+          <p class="eyebrow">Where you've been</p>
+          <h2 id="map-heading">Your game map</h2>
+        </div>
+        <p class="map-summary" id="map-summary">Add games to see where you have been.</p>
+      </div>
+      <p class="map-status" id="map-status" role="status" aria-live="polite"></p>
+      <button class="map-action-button" id="map-cancel" type="button" hidden>Cancel placing</button>
+      <p class="map-unavailable" id="map-unavailable" hidden>The map could not be loaded. Check your internet connection and reload.</p>
+      <div class="venue-map" id="venue-map" role="region" aria-label="Map of venues you have visited"></div>
+      <div class="unlocated-venues" id="unlocated-venues" hidden>
+        <h3>Venues without a location</h3>
+        <ul class="unlocated-list" id="unlocated-list"></ul>
+      </div>
+    </section>
 
     <section class="team-stats" aria-labelledby="team-stats-heading">
       <div class="team-stats-header">
@@ -196,6 +219,9 @@
       <span>Saved on this device</span>
     </footer>
   </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <script src="data/venues.js" defer></script>
+  <script src="js/map.js" defer></script>
   <script src="js/app.js" defer></script>
 
 
