@@ -48,7 +48,7 @@ function loadEvents() {
         savedEvent
         && savedEvent.id
         && savedEvent.sport
-        && (savedEvent.name || (savedEvent.homeTeam && savedEvent.awayTeam))
+        && (savedEvent.name || savedEvent.raceName || (savedEvent.homeTeam && savedEvent.awayTeam))
         && savedEvent.date
         && savedEvent.venue
         && !Number.isNaN(Date.parse(`${savedEvent.date}T12:00:00`))
@@ -131,6 +131,10 @@ function formatDate(date) {
 }
 
 function getMatchup(savedEvent) {
+  if (isNascar(savedEvent)) {
+    return savedEvent.raceName || savedEvent.name;
+  }
+
   if (savedEvent.homeTeam && savedEvent.awayTeam) {
     return `${savedEvent.homeTeam} vs ${savedEvent.awayTeam}`;
   }
@@ -139,6 +143,10 @@ function getMatchup(savedEvent) {
 }
 
 function getDisplayedMatchup(savedEvent) {
+  if (isNascar(savedEvent)) {
+    return getMatchup(savedEvent);
+  }
+
   if (savedEvent.homeTeam && savedEvent.awayTeam) {
     return `${savedEvent.awayTeam} vs ${savedEvent.homeTeam}`;
   }
@@ -147,7 +155,15 @@ function getDisplayedMatchup(savedEvent) {
   return teams.length === 2 ? `${teams[1]} vs ${teams[0]}` : getMatchup(savedEvent);
 }
 
+function isNascar(savedEvent) {
+  return savedEvent.sport === 'NASCAR';
+}
+
 function getTeamNames(savedEvent) {
+  if (isNascar(savedEvent)) {
+    return [];
+  }
+
   if (savedEvent.homeTeam && savedEvent.awayTeam) {
     return [savedEvent.homeTeam, savedEvent.awayTeam];
   }
@@ -283,10 +299,29 @@ function appendTeamName(matchup, teamName, isWinner) {
   matchup.append(team);
 }
 
+const teamFields = document.querySelector('#team-fields');
+const nascarFields = document.querySelector('#nascar-fields');
+const scoreFields = document.querySelector('#score-fields');
+const venueLabel = document.querySelector('#event-venue-label');
+
+// Swaps the team fields for race fields; disabled inputs are skipped by validation and FormData.
+function updateSportFields() {
+  const nascar = eventForm.elements.sport.value === 'NASCAR';
+  teamFields.hidden = nascar;
+  scoreFields.hidden = nascar;
+  nascarFields.hidden = !nascar;
+  teamFields.querySelectorAll('input').forEach((input) => { input.disabled = nascar; });
+  scoreFields.querySelectorAll('input').forEach((input) => { input.disabled = nascar; });
+  nascarFields.querySelectorAll('input').forEach((input) => { input.disabled = !nascar; });
+  venueLabel.textContent = nascar ? 'Track' : 'Venue';
+  eventForm.elements.venue.placeholder = nascar ? 'Daytona International Speedway' : 'Amon G. Carter Stadium';
+}
+
 function resetEventForm() {
   editingEventId = null;
   venueWasAutofilled = false;
   eventForm.reset();
+  updateSportFields();
   entryHeading.textContent = 'Add a game';
   saveButtonLabel.textContent = 'Save game';
   cancelEditButton.hidden = true;
@@ -297,6 +332,9 @@ function editEvent(savedEvent) {
   editingEventId = savedEvent.id;
   venueWasAutofilled = false;
   eventForm.elements.sport.value = savedEvent.sport;
+  updateSportFields();
+  eventForm.elements.raceName.value = savedEvent.raceName || '';
+  eventForm.elements.raceWinner.value = savedEvent.raceWinner || '';
   eventForm.elements.homeTeam.value = teams[0] || '';
   eventForm.elements.awayTeam.value = teams[1] || '';
   eventForm.elements.date.value = savedEvent.date;
@@ -311,7 +349,7 @@ function editEvent(savedEvent) {
   cancelEditButton.hidden = false;
   statusMessage.textContent = `Editing ${getMatchup(savedEvent)}.`;
   eventForm.scrollIntoView({ block: 'start' });
-  eventForm.elements.homeTeam.focus();
+  (isNascar(savedEvent) ? eventForm.elements.raceName : eventForm.elements.homeTeam).focus();
 }
 
 function displayTeamStats() {
@@ -450,7 +488,9 @@ function displayEvents() {
     const name = document.createElement('h3');
     const teams = getTeamNames(savedEvent);
 
-    if (teams.length === 2) {
+    if (isNascar(savedEvent)) {
+      name.textContent = getMatchup(savedEvent);
+    } else if (teams.length === 2) {
       const awayTeam = savedEvent.awayTeam || teams[1];
       const homeTeam = savedEvent.homeTeam || teams[0];
       appendTeamName(name, awayTeam, savedEvent.winner === 'away');
@@ -465,6 +505,13 @@ function displayEvents() {
 
     const gameResult = document.createElement('div');
     gameResult.className = 'event-result';
+
+    if (isNascar(savedEvent) && savedEvent.raceWinner) {
+      const winner = document.createElement('span');
+      winner.className = 'event-score';
+      winner.textContent = `Winner: ${savedEvent.raceWinner}`;
+      gameResult.append(winner);
+    }
 
     if (savedEvent.score || savedEvent.winner) {
       if (savedEvent.score) {
@@ -561,6 +608,46 @@ eventForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const formData = new FormData(eventForm);
+
+  if (formData.get('sport') === 'NASCAR') {
+    const raceDetails = {
+      sport: 'NASCAR',
+      raceName: formData.get('raceName').trim(),
+      raceWinner: formData.get('raceWinner').trim(),
+      date: formData.get('date'),
+      venue: formData.get('venue').trim(),
+      notes: formData.get('notes').trim()
+    };
+
+    if (!raceDetails.raceName || !raceDetails.raceWinner || !raceDetails.venue) {
+      statusMessage.textContent = 'Enter the race name, winner, and track before saving.';
+      return;
+    }
+
+    const wasEditingRace = editingEventId !== null;
+    let savedRace;
+
+    if (wasEditingRace) {
+      events = events.map((existingEvent) => (
+        existingEvent.id === editingEventId ? { id: existingEvent.id, ...raceDetails } : existingEvent
+      ));
+      savedRace = events.find((existingEvent) => existingEvent.id === editingEventId);
+    } else {
+      savedRace = { id: String(Date.now()), ...raceDetails };
+      events.push(savedRace);
+    }
+
+    const raceSaved = saveEvents();
+    sportFilter.value = 'all';
+    displayEvents();
+    resetEventForm();
+    statusMessage.textContent = raceSaved
+      ? `${savedRace.raceName} was ${wasEditingRace ? 'updated' : 'added'} in your event log.`
+      : `The race was ${wasEditingRace ? 'updated' : 'added'} for now, but could not be saved in this browser.`;
+    ensureVenueLocation(savedRace);
+    return;
+  }
+
   const eventDetails = {
     sport: formData.get('sport'),
     homeTeam: formData.get('homeTeam').trim(),
@@ -622,6 +709,7 @@ function suggestVenue() {
 
 eventForm.elements.homeTeam.addEventListener('change', suggestVenue);
 eventForm.elements.sport.addEventListener('change', suggestVenue);
+eventForm.elements.sport.addEventListener('change', updateSportFields);
 eventForm.elements.venue.addEventListener('input', () => {
   venueWasAutofilled = false;
 });
@@ -668,3 +756,4 @@ guideOpenButton.addEventListener('click', () => guideDialog.showModal());
 guideCloseButton.addEventListener('click', () => guideDialog.close());
 displayFavoriteTeams();
 displayEvents();
+updateSportFields();

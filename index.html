@@ -76,6 +76,7 @@
             <option>College Basketball</option>
             <option>College Football</option>
             <option>MLB</option>
+            <option>NASCAR</option>
             <option>NBA</option>
             <option>NFL</option>
             <option>NHL</option>
@@ -84,6 +85,7 @@
 
           </select>
 
+          <div class="form-group" id="team-fields">
           <label for="event-home-team">Home team</label>
           <div class="team-entry-row">
             <input id="event-home-team" name="homeTeam" type="text" placeholder="TCU" required>
@@ -101,16 +103,27 @@
               <label for="winner-away">Won</label>
             </div>
           </div>
+          </div>
+
+          <div class="form-group" id="nascar-fields" hidden>
+            <label for="event-race-name">Race name</label>
+            <input id="event-race-name" name="raceName" type="text" placeholder="Daytona 500" required disabled>
+
+            <label for="event-race-winner">Race winner</label>
+            <input id="event-race-winner" name="raceWinner" type="text" placeholder="Driver name" required disabled>
+          </div>
 
           <label for="event-date">Date</label>
           <input id="event-date" name="date" type="date" required>
 
-          <label for="event-venue">Venue</label>
+          <label for="event-venue" id="event-venue-label">Venue</label>
           <input id="event-venue" name="venue" type="text" list="venue-options" placeholder="Amon G. Carter Stadium" required>
           <datalist id="venue-options"></datalist>
 
-          <label for="event-score">Final score</label>
-          <input id="event-score" name="score" type="text" placeholder="For example, 24-17">
+          <div class="form-group" id="score-fields">
+            <label for="event-score">Final score</label>
+            <input id="event-score" name="score" type="text" placeholder="For example, 24-17">
+          </div>
 
           <label for="event-notes">Notes (optional)</label>
           <textarea id="event-notes" name="notes" rows="3" placeholder="Anything you want to remember"></textarea>
@@ -142,6 +155,7 @@
                 <option>College Basketball</option>
                 <option>College Football</option>
                 <option>MLB</option>
+                <option>NASCAR</option>
                 <option>NBA</option>
                 <option>NFL</option>
                 <option>NHL</option>

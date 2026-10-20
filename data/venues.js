@@ -240,6 +240,37 @@ addVenue('Scott Stadium', 'Charlottesville, VA', 38.0289, -78.5139, { 'College F
 addVenue('Lane Stadium', 'Blacksburg, VA', 37.22, -80.418, { 'College Football': ['Virginia Tech|Hokies'] });
 addVenue('Allegacy Federal Credit Union Stadium', 'Winston-Salem, NC', 36.13, -80.2557, { 'College Football': ['Wake Forest|Demon Deacons'] }, ['Truist Field', 'BB&T Field']);
 
+// NASCAR tracks on the Cup Series schedule
+addVenue('Daytona International Speedway', 'Daytona Beach, FL', 29.1852, -81.0705, {}, ['Daytona']);
+addVenue('EchoPark Speedway', 'Hampton, GA', 33.3846, -84.3167, {}, ['Atlanta Motor Speedway', 'Atlanta Speedway']);
+addVenue('Circuit of the Americas', 'Austin, TX', 30.1328, -97.6411, {}, ['COTA']);
+addVenue('Phoenix Raceway', 'Avondale, AZ', 33.3764, -112.3113, {}, ['ISM Raceway']);
+addVenue('Las Vegas Motor Speedway', 'Las Vegas, NV', 36.2722, -115.0101);
+addVenue('Homestead-Miami Speedway', 'Homestead, FL', 25.4517, -80.4086, {}, ['Homestead Miami Speedway']);
+addVenue('Martinsville Speedway', 'Martinsville, VA', 36.6342, -79.8517);
+addVenue('Darlington Raceway', 'Darlington, SC', 34.2942, -79.9055);
+addVenue('Bristol Motor Speedway', 'Bristol, TN', 36.5156, -82.257);
+addVenue('Kansas Speedway', 'Kansas City, KS', 39.1157, -94.8311);
+addVenue('Talladega Superspeedway', 'Talladega, AL', 33.5671, -86.0657, {}, ['Talladega']);
+addVenue('Texas Motor Speedway', 'Fort Worth, TX', 33.0372, -97.2819);
+addVenue('Watkins Glen International', 'Watkins Glen, NY', 42.3369, -76.9272, {}, ['Watkins Glen']);
+addVenue('Charlotte Motor Speedway', 'Concord, NC', 35.3519, -80.6828);
+addVenue('Nashville Superspeedway', 'Lebanon, TN', 36.0445, -86.4017);
+addVenue('Michigan International Speedway', 'Brooklyn, MI', 42.0678, -84.242);
+addVenue('Pocono Raceway', 'Long Pond, PA', 41.0555, -75.5114);
+addVenue('Indianapolis Motor Speedway', 'Speedway, IN', 39.795, -86.2353, {}, ['Brickyard']);
+addVenue('Richmond Raceway', 'Richmond, VA', 37.5919, -77.4192);
+addVenue('New Hampshire Motor Speedway', 'Loudon, NH', 43.3628, -71.4603);
+addVenue('Iowa Speedway', 'Newton, IA', 41.6777, -93.0112);
+addVenue('Sonoma Raceway', 'Sonoma, CA', 38.1608, -122.4548);
+addVenue('Chicago Street Course', 'Chicago, IL', 41.8756, -87.619);
+addVenue('World Wide Technology Raceway', 'Madison, IL', 38.6506, -90.1366, {}, ['Gateway Motorsports Park']);
+addVenue('Dover Motor Speedway', 'Dover, DE', 39.1901, -75.5309, {}, ['Dover International Speedway']);
+addVenue('Road America', 'Elkhart Lake, WI', 43.7978, -87.9899);
+addVenue('North Wilkesboro Speedway', 'North Wilkesboro, NC', 36.1294, -81.0996);
+addVenue('Los Angeles Memorial Coliseum', 'Los Angeles, CA', 34.0141, -118.2879);
+addVenue('Autodromo Hermanos Rodriguez', 'Mexico City, Mexico', 19.4042, -99.0907);
+
 // International and neutral sites
 addVenue('Aviva Stadium', 'Dublin, Ireland', 53.3351, -6.2285, {}, ['Lansdowne Road']);
 addVenue('Croke Park', 'Dublin, Ireland', 53.3607, -6.2512);

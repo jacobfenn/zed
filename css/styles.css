@@ -319,6 +319,10 @@ h1 {
   gap: 0.5rem;
 }
 
+.form-group {
+  display: contents;
+}
+
 .form-actions {
   display: flex;
   flex-wrap: wrap;
