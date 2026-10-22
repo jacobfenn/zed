@@ -323,6 +323,11 @@ h1 {
   display: contents;
 }
 
+.page-header-eyebrow {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
 .form-actions {
   display: flex;
   flex-wrap: wrap;
