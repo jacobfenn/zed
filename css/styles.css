@@ -572,8 +572,7 @@ button:focus-visible {
 }
 
 .event-date--series-cup {
-  background: #d4a017;
-  color: #2b2100;
+  background: #315f85;
 }
 
 .event-date--series-oreilly {
@@ -586,7 +585,8 @@ button:focus-visible {
 
 .event-date--series-arca {
   background: #315f85;
-}
+}d4a017;
+  color: #2b2100
 
 .event-date-result {
   font-size: 0.7rem;
