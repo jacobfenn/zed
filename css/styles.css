@@ -566,6 +566,19 @@ button:focus-visible {
   background: #9f2f38;
 }
 
+.event-date--series-cup {
+  background: #d4a017;
+  color: #2b2100;
+}
+
+.event-date--series-oreilly {
+  background: #205b35;
+}
+
+.event-date--series-truck {
+  background: #9f2f38;
+}
+
 .event-date-result {
   font-size: 0.7rem;
   font-weight: 800;

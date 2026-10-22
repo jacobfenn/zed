@@ -334,6 +334,7 @@ function editEvent(savedEvent) {
   eventForm.elements.sport.value = savedEvent.sport;
   updateSportFields();
   eventForm.elements.raceName.value = savedEvent.raceName || '';
+  eventForm.elements.series.value = savedEvent.series || 'Cup Series';
   eventForm.elements.raceWinner.value = savedEvent.raceWinner || '';
   eventForm.elements.homeTeam.value = teams[0] || '';
   eventForm.elements.awayTeam.value = teams[1] || '';
@@ -469,7 +470,16 @@ function displayEvents() {
     date.append(dateText);
 
     const favoriteResult = getFavoriteTeamTileResult(savedEvent);
-    if (favoriteResult) {
+    if (isNascar(savedEvent)) {
+      const seriesClass = { 'Cup Series': 'cup', "O'Reilly Auto Parts Series": 'oreilly', 'Truck Series': 'truck' }[savedEvent.series];
+      if (seriesClass) {
+        date.classList.add(`event-date--series-${seriesClass}`);
+        const seriesLabel = document.createElement('span');
+        seriesLabel.className = 'event-date-result';
+        seriesLabel.textContent = savedEvent.series.replace(' Auto Parts', '');
+        date.append(seriesLabel);
+      }
+    } else if (favoriteResult) {
       date.classList.add(`event-date--favorite-${favoriteResult}`);
       const result = document.createElement('span');
       result.className = 'event-date-result';
@@ -612,8 +622,8 @@ eventForm.addEventListener('submit', (event) => {
   if (formData.get('sport') === 'NASCAR') {
     const raceDetails = {
       sport: 'NASCAR',
-      raceName: formData.get('raceName').trim(),
-      raceWinner: formData.get('raceWinner').trim(),
+      series: formData.get('series'),
+      raceName: formData.get('raceName').trim(),      raceWinner: formData.get('raceWinner').trim(),
       date: formData.get('date'),
       venue: formData.get('venue').trim(),
       notes: formData.get('notes').trim()
