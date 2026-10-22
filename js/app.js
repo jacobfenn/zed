@@ -312,7 +312,7 @@ function updateSportFields() {
   nascarFields.hidden = !nascar;
   teamFields.querySelectorAll('input').forEach((input) => { input.disabled = nascar; });
   scoreFields.querySelectorAll('input').forEach((input) => { input.disabled = nascar; });
-  nascarFields.querySelectorAll('input').forEach((input) => { input.disabled = !nascar; });
+  nascarFields.querySelectorAll('input, select').forEach((input) => { input.disabled = !nascar; });
   venueLabel.textContent = nascar ? 'Track' : 'Venue';
   eventForm.elements.venue.placeholder = nascar ? 'Daytona International Speedway' : 'Amon G. Carter Stadium';
 }
