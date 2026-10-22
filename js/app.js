@@ -471,7 +471,7 @@ function displayEvents() {
 
     const favoriteResult = getFavoriteTeamTileResult(savedEvent);
     if (isNascar(savedEvent)) {
-      const seriesClass = { 'Cup Series': 'cup', "O'Reilly Auto Parts Series": 'oreilly', 'Truck Series': 'truck' }[savedEvent.series];
+      const seriesClass = { 'Cup Series': 'cup', "O'Reilly Auto Parts Series": 'oreilly', 'Truck Series': 'truck', ARCA: 'arca' }[savedEvent.series];
       if (seriesClass) {
         date.classList.add(`event-date--series-${seriesClass}`);
         const seriesLabel = document.createElement('span');
