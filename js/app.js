@@ -531,7 +531,7 @@ function displayEvents() {
     if (isNascar(savedEvent) && savedEvent.raceWinner) {
       const winner = document.createElement('span');
       winner.className = 'event-score';
-      winner.textContent = `Winner: ${savedEvent.raceWinner}${isFavoriteDriverWin(savedEvent) ? ' (favorite win)' : ''}`;
+      winner.textContent = `Winner: ${savedEvent.raceWinner}`;
       gameResult.append(winner);
     }
 
