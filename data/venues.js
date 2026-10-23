@@ -1,5 +1,16 @@
 // Known venues with coordinates; teams are 'Place|Nickname[|extra alias...]' grouped by the sport names used in the form.
 const KNOWN_VENUES = [];
+const SPORT_COLORS = {
+  'College Baseball': '#a0522d',
+  'College Basketball': '#7b3fa0',
+  'College Football': '#2e7d32',
+  MLB: '#c8102e',
+  NASCAR: '#a97a00',
+  NBA: '#d9531e',
+  NFL: '#1f4e8c',
+  NHL: '#2a7fa8',
+  Other: '#4d5a73'
+};
 const venueByName = new Map();
 const venuesByTeam = new Map();
 

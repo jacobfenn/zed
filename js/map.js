@@ -248,17 +248,29 @@ function displayMap() {
   }
 
   pinLayer.clearLayers();
+  const legend = document.querySelector('#map-legend');
+  const legendSports = [...new Set(visibleEvents.map((savedEvent) => savedEvent.sport))].sort();
+  legend.replaceChildren(...legendSports.map((sport) => {
+    const item = document.createElement('li');
+    const dot = document.createElement('span');
+    dot.className = 'map-legend-dot';
+    dot.style.backgroundColor = SPORT_COLORS[sport] || SPORT_COLORS.Other;
+    item.append(dot, document.createTextNode(sport));
+    return item;
+  }));
   const mostVisits = Math.max(1, ...[...groups.values()].map((group) => group.games.length));
   const points = [];
 
   groups.forEach((group) => {
     const radius = 6 + (group.games.length / mostVisits) * 8;
+    const groupSports = new Set(group.games.map((savedEvent) => savedEvent.sport));
+    const pinColor = groupSports.size === 1 ? (SPORT_COLORS[[...groupSports][0]] || SPORT_COLORS.Other) : SPORT_COLORS.Other;
     L.circleMarker([group.lat, group.lng], {
       radius,
-      color: '#4d4160',
+      color: '#fff',
       weight: 2,
-      fillColor: '#c94f54',
-      fillOpacity: 0.8
+      fillColor: pinColor,
+      fillOpacity: 0.9
     })
       .bindPopup(buildPopup(group))
       .bindTooltip(group.name)

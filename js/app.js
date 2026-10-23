@@ -426,6 +426,7 @@ function displayEvents() {
   displayFavoriteRecord();
   displayVenueStats();
   displayMap();
+  displayDashboard();
 
   const sortedEvents = [...events].sort((firstEvent, secondEvent) => (
     secondEvent.date.localeCompare(firstEvent.date)
@@ -461,6 +462,7 @@ function displayEvents() {
 
     const item = document.createElement('li');
     item.className = 'event-row';
+    item.style.setProperty('--sport', SPORT_COLORS[savedEvent.sport] || SPORT_COLORS.Other);
 
     const date = document.createElement('time');
     date.className = 'event-date';
@@ -759,6 +761,110 @@ cancelEditButton.addEventListener('click', () => {
   resetEventForm();
   statusMessage.textContent = 'Edit cancelled.';
   document.querySelector('#event-home-team').focus();
+});
+
+function displayDashboard() {
+  const results = events.flatMap(getFavoriteTeamResults);
+  const wins = results.filter((result) => result === 'win').length;
+
+  document.querySelector('#stat-games').textContent = events.length;
+  document.querySelector('#stat-venues').textContent = new Set(events.map((savedEvent) => normalizeName(savedEvent.venue))).size;
+  document.querySelector('#stat-sports').textContent = new Set(events.map((savedEvent) => savedEvent.sport)).size;
+  document.querySelector('#stat-winrate').textContent = results.length ? `${Math.round((wins / results.length) * 100)}%` : '\u2013';
+
+  const chips = document.querySelector('#sport-chips');
+  chips.replaceChildren(...[...sportFilter.options].map((option) => {
+    const value = option.value || option.textContent;
+    const count = value === 'all' ? events.length : events.filter((savedEvent) => savedEvent.sport === value).length;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'sport-chip';
+    chip.dataset.sport = value;
+    chip.setAttribute('aria-pressed', String(sportFilter.value === value));
+    chip.style.setProperty('--sport', SPORT_COLORS[value] || '#0e1a33');
+    chip.textContent = `${value === 'all' ? 'All' : value} ${count}`;
+    chip.hidden = value !== 'all' && count === 0 && sportFilter.value !== value;
+    return chip;
+  }));
+}
+
+document.querySelector('#sport-chips').addEventListener('click', (event) => {
+  const chip = event.target.closest('.sport-chip');
+
+  if (chip) {
+    sportFilter.value = chip.dataset.sport;
+    displayEvents();
+  }
+});
+
+const THEME_KEY = 'sportsEventTrackerTheme';
+const themeToggle = document.querySelector('#theme-toggle');
+
+function applyTheme(theme) {
+  const dark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  themeToggle.textContent = dark ? 'Light mode' : 'Dark mode';
+  themeToggle.setAttribute('aria-pressed', String(dark));
+}
+
+themeToggle.addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  try {
+    localStorage.setItem(THEME_KEY, next);
+  } catch (error) {
+    // The theme still applies for this visit.
+  }
+  applyTheme(next);
+});
+
+try {
+  applyTheme(localStorage.getItem(THEME_KEY));
+} catch (error) {
+  applyTheme(null);
+}
+
+document.querySelector('#export-button').addEventListener('click', () => {
+  const backup = new Blob([JSON.stringify({ events, favoriteTeams }, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(backup);
+  link.download = `game-log-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+});
+
+const importFile = document.querySelector('#import-file');
+document.querySelector('#import-button').addEventListener('click', () => importFile.click());
+importFile.addEventListener('change', async () => {
+  const [file] = importFile.files;
+  importFile.value = '';
+
+  if (!file) {
+    return;
+  }
+
+  try {
+    const backup = JSON.parse(await file.text());
+    const imported = (Array.isArray(backup.events) ? backup.events : []).filter((savedEvent) => (
+      savedEvent && savedEvent.id && savedEvent.sport && savedEvent.venue
+      && !Number.isNaN(Date.parse(`${savedEvent.date}T12:00:00`))
+    ));
+
+    if (imported.length === 0 || !window.confirm(`Replace your ${events.length} saved games with ${imported.length} from this backup?`)) {
+      statusMessage.textContent = imported.length === 0 ? 'That file has no games to import.' : 'Import cancelled.';
+      return;
+    }
+
+    events = imported;
+    favoriteTeams = (Array.isArray(backup.favoriteTeams) ? backup.favoriteTeams : [])
+      .filter((team) => typeof team === 'string' && team.trim());
+    saveEvents();
+    saveFavoriteTeams();
+    displayFavoriteTeams();
+    displayEvents();
+    statusMessage.textContent = `Imported ${imported.length} games.`;
+  } catch (error) {
+    statusMessage.textContent = 'That file could not be read as a backup.';
+  }
 });
 
 sportFilter.addEventListener('change', displayEvents);

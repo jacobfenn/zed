@@ -9,8 +9,11 @@
   <title>Game Log | Sports Event Tracker</title>
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <link rel="stylesheet" href="css/styles.css?v=10">
+  <link rel="stylesheet" href="css/styles.css?v=12">
 </head>
 
 <body>
@@ -24,11 +27,19 @@
         <p class="page-intro">Every match you've been to... in one place.</p>
       </div>
       <div class="header-actions">
+        <button class="guide-button" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
         <button class="guide-button" id="guide-open" type="button">How to use</button>
         <p class="total-count"><span id="event-count" aria-live="polite">0</span> games logged</p>
       </div>
 
     </header>
+
+    <section class="stat-strip" aria-label="Your totals">
+      <div class="stat-card"><strong id="stat-games">0</strong><span>Games</span></div>
+      <div class="stat-card"><strong id="stat-venues">0</strong><span>Venues</span></div>
+      <div class="stat-card"><strong id="stat-sports">0</strong><span>Sports</span></div>
+      <div class="stat-card"><strong id="stat-winrate">&ndash;</strong><span>Win rate</span></div>
+    </section>
 
     <dialog class="guide-dialog" id="guide-dialog" aria-labelledby="guide-heading">
       <div class="guide-dialog-header">
@@ -157,7 +168,7 @@
             <h2 id="log-heading">Event log</h2>
           </div>
           <div class="log-controls">
-            <div class="filter-control">
+            <div class="filter-control" hidden>
               <label for="sport-filter">Show</label>
               <select id="sport-filter">
                 <option value="all">All sports</option>
@@ -174,6 +185,8 @@
             </div>
           </div>
         </div>
+
+        <div class="sport-chips" id="sport-chips" role="group" aria-label="Filter by sport"></div>
 
         <p class="status-message" id="status-message" role="status" aria-live="polite"></p>
         <p class="empty-state" id="empty-state">No games added yet. Your first one can go here.</p>
@@ -195,6 +208,7 @@
       <button class="map-action-button" id="map-cancel" type="button" hidden>Cancel placing</button>
       <p class="map-unavailable" id="map-unavailable" hidden>The map could not be loaded. Check your internet connection and reload.</p>
       <div class="venue-map" id="venue-map" role="region" aria-label="Map of venues you have visited"></div>
+      <ul class="map-legend" id="map-legend" aria-label="Pin colors by sport"></ul>
       <div class="unlocated-venues" id="unlocated-venues" hidden>
         <h3>Venues without a location</h3>
         <ul class="unlocated-list" id="unlocated-list"></ul>
@@ -241,12 +255,17 @@
 
     <footer class="page-footer">
       <span>Saved on this device</span>
+      <span class="backup-actions">
+        <button class="guide-button" id="export-button" type="button">Export backup</button>
+        <button class="guide-button" id="import-button" type="button">Import backup</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden>
+      </span>
     </footer>
   </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="data/venues.js?v=10" defer></script>
-  <script src="js/map.js?v=10" defer></script>
-  <script src="js/app.js?v=10" defer></script>
+  <script src="data/venues.js?v=12" defer></script>
+  <script src="js/map.js?v=12" defer></script>
+  <script src="js/app.js?v=12" defer></script>
 
 
 </body>
