@@ -635,7 +635,8 @@ eventForm.addEventListener('submit', (event) => {
     const raceDetails = {
       sport: 'NASCAR',
       series: formData.get('series'),
-      raceName: formData.get('raceName').trim(),      raceWinner: formData.get('raceWinner').trim(),
+      raceName: formData.get('raceName').trim(),
+      raceWinner: formData.get('raceWinner').trim(),
       date: formData.get('date'),
       venue: formData.get('venue').trim(),
       notes: formData.get('notes').trim()
