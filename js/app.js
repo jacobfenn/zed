@@ -801,7 +801,7 @@ const THEME_KEY = 'sportsEventTrackerTheme';
 const themeToggle = document.querySelector('#theme-toggle');
 
 function applyTheme(theme) {
-  const dark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const dark = theme === 'dark';
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   themeToggle.textContent = dark ? 'Light mode' : 'Dark mode';
   themeToggle.setAttribute('aria-pressed', String(dark));
