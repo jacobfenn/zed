@@ -1188,6 +1188,7 @@ button:focus-visible {
   --focus: #796895;
   --gold: #f2b705;
   --hero-base: #4d4160;
+  --hero-end: #3a2f4d;
   --hero-slash: rgba(201, 79, 84, 0.85);
   --display: "Barlow Condensed", "Oswald", "Arial Narrow", Impact, sans-serif;
   --shadow: 0 1px 2px rgba(48, 44, 56, 0.06), 0 8px 24px rgba(48, 44, 56, 0.1);
@@ -1202,7 +1203,7 @@ button:focus-visible {
   --primary: #f2f5fc;
   --primary-dark: #0a1226;
   --accent: #e63946;
-  --focus: #e63946;
+  --focus: #e63914224a;
   --hero-base: #0e1a33;
   --hero-slash: rgba(230, 57, 70, 0.9);
   --accent-light: #1d2640;
@@ -1239,8 +1240,9 @@ h1, h2 {
   border: 0;
   border-radius: 10px;
   background:
-    linear-gradient(120deg, var(--hero-slash) 0, transparent 38%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 14px, transparent 14px 28px),
+    radial-gradient(ellipse 45% 120% at 8% -10%, rgba(255, 255, 255, 0.28), transparent 70%),
+    radial-gradient(ellipse 45% 120% at 92% -10%, rgba(255, 255, 255, 0.22), transparent 70%),
+    radial-gradient(ellipse 60% 80% at 50% 130%, var(--hero-slash), transparent 70%),
     var(--hero-base);
   box-shadow: var(--shadow);
   color: #fff;
@@ -1257,7 +1259,12 @@ h1 {
 }
 
 .page-intro, .total-count {
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.page-intro {
+  font-size: 1.1rem;
+  font-weight: 400;
 }
 
 .total-count span {
