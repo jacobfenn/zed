@@ -1325,6 +1325,10 @@ h1 {
 }
 
 .entry-panel {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
   border: 0;
   border-top: 5px solid var(--accent);
   border-radius: 10px;
@@ -1612,6 +1616,11 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 760px) {
+  .entry-panel {
+    position: static;
+    max-height: none;
+  }
+
   .stat-strip {
     grid-template-columns: repeat(2, 1fr);
     margin: 0.9rem 0 0;

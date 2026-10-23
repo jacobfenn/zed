@@ -660,7 +660,7 @@ eventForm.addEventListener('submit', (event) => {
     }
 
     const raceSaved = saveEvents();
-    sportFilter.value = 'all';
+    sportFilter.value = keepFilterAfterSave(wasEditingRace, savedRace.sport);
     displayEvents();
     resetEventForm();
     statusMessage.textContent = raceSaved
@@ -708,7 +708,7 @@ eventForm.addEventListener('submit', (event) => {
   }
 
   const wasSaved = saveEvents();
-  sportFilter.value = 'all';
+  sportFilter.value = keepFilterAfterSave(wasEditing, savedEvent.sport);
   displayEvents();
   resetEventForm();
   statusMessage.textContent = wasSaved
@@ -717,6 +717,15 @@ eventForm.addEventListener('submit', (event) => {
   document.querySelector('#event-home-team').focus();
   ensureVenueLocation(savedEvent);
 });
+
+// Editing keeps the current sport tab; new games reset to all sports.
+function keepFilterAfterSave(wasEditing, sport) {
+  if (!wasEditing) {
+    return 'all';
+  }
+
+  return sportFilter.value === 'all' || sportFilter.value === sport ? sportFilter.value : sport;
+}
 
 // Fills the venue from the home team's stadium unless the user typed their own.
 function suggestVenue() {
