@@ -521,7 +521,7 @@ function displayEvents() {
     } else {
       name.textContent = getDisplayedMatchup(savedEvent);
     }
-${isFavoriteDriverWin(savedEvent) ? ' (favorite win)' : ''}
+
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
 
@@ -531,7 +531,7 @@ ${isFavoriteDriverWin(savedEvent) ? ' (favorite win)' : ''}
     if (isNascar(savedEvent) && savedEvent.raceWinner) {
       const winner = document.createElement('span');
       winner.className = 'event-score';
-      winner.textContent = `Winner: ${savedEvent.raceWinner}`;
+      winner.textContent = `Winner: ${savedEvent.raceWinner}${isFavoriteDriverWin(savedEvent) ? ' (favorite win)' : ''}`;
       gameResult.append(winner);
     }
 
