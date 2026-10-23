@@ -172,7 +172,17 @@ function getTeamNames(savedEvent) {
   return oldMatchup.length === 2 ? oldMatchup : [savedEvent.name || ''];
 }
 
+function isFavoriteDriverWin(savedEvent) {
+  const winner = (savedEvent.raceWinner || '').trim().toLocaleLowerCase();
+  return Boolean(winner) && favoriteTeams.some((team) => team.trim().toLocaleLowerCase() === winner);
+}
+
 function getFavoriteTeamResults(savedEvent) {
+  // A favorite driver winning counts as a win; any other NASCAR race is not a loss.
+  if (isNascar(savedEvent)) {
+    return isFavoriteDriverWin(savedEvent) ? ['win'] : [];
+  }
+
   const teams = getTeamNames(savedEvent);
   if (!['home', 'away'].includes(savedEvent.winner) || teams.length !== 2) {
     return [];
@@ -511,7 +521,7 @@ function displayEvents() {
     } else {
       name.textContent = getDisplayedMatchup(savedEvent);
     }
-
+${isFavoriteDriverWin(savedEvent) ? ' (favorite win)' : ''}
     const venue = document.createElement('p');
     venue.textContent = savedEvent.venue;
 
