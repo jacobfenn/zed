@@ -1481,7 +1481,7 @@ input:focus, select:focus, textarea:focus {
 .event-date--favorite-win { background: #205b35; }
 .event-date--favorite-loss { background: #9f2f38; }
 .event-date--series-cup { background: #315f85; }
-.event-date--series-oreilly { background: #205b35; }
+.event-date--series-oreilly { background: #2f9150; }
 .event-date--series-truck { background: #9f2f38; }
 .event-date--series-arca { background: #d4a017; }
 .event-date--no-winner { background: #8a8f9c; }
