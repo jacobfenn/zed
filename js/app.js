@@ -482,6 +482,9 @@ function displayEvents() {
     date.append(dateText);
 
     const favoriteResult = getFavoriteTeamTileResult(savedEvent);
+    if (!isNascar(savedEvent) && !savedEvent.winner) {
+      date.classList.add('event-date--no-winner');
+    }
     if (isNascar(savedEvent)) {
       const seriesClass = { 'Cup Series': 'cup', "O'Reilly Auto Parts Series": 'oreilly', 'Truck Series': 'truck', ARCA: 'arca' }[savedEvent.series];
       if (seriesClass) {

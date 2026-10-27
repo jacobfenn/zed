@@ -1484,6 +1484,7 @@ input:focus, select:focus, textarea:focus {
 .event-date--series-oreilly { background: #205b35; }
 .event-date--series-truck { background: #9f2f38; }
 .event-date--series-arca { background: #d4a017; }
+.event-date--no-winner { background: #8a8f9c; }
 
 .event-date-result {
   font-size: 0.85rem;
